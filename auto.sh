@@ -1,5 +1,4 @@
 #!/bin/bash
-su
 echo print init system (runit, openrc only for now)
 read initsys
 echo print kernel (linux, linux-zen, linux-lts)
