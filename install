@@ -1,6 +1,6 @@
 #!/bin/bash
 basestrap /mnt base base-devel runit elogind-runit linux-zen linux-zen-headers linux-firmware grub os-prober efibootmgr networkmanager-runit sudo nano
-fstabgen -L /mnt >> /mnt/ets/fstab
+fstabgen -L /mnt >> /mnt/etс/fstab
 locale >> /mnt/etc/locale.conf
 echo artixdan > /mnt/etc/hostname
 echo FONT=cyr-sun16 > /mnt/etc/vconsole.conf
