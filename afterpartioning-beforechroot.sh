@@ -1,13 +1,13 @@
 #!/bin/bash
-echo print init system (runit and openrc only for now)
+echo "print init system (runit and openrc only for now)"
 read initsys
-echo print kernel (linux, linux-zen, linux-lts)
+echo "print kernel (linux, linux-zen, linux-lts)"
 read kernel
 echo print hostname
 read hostname
-echo print console font (cyr-sun16 for russian)
+echo "print console font (cyr-sun16 for russian)"
 read consolfont
-echo print locale (for example ru_RU)
+echo "print locale (for example ru_RU)"
 read local
 # пошло говно по трубам
 basestrap /mnt base base-devel $initsys elogind-$initsys networkmanager-$initsys $kernel $kernel-headers linux-firmware grub os-prober efibootmgr sudo nano
