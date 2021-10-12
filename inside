@@ -1,9 +1,0 @@
-#!/bin/bash
-ln -sf /usr/share/zoneinfo/Europe/Moscow /etc/localtime
-hwclock --systohc --utc
-nano /etc/locale.gen
-echo en_US.UTF-8 UTF-8 >> /etc/locale.gen
-echo ru_RU.UTF-8 UTF-8 >> /etc/locale.gen
-locale-gen
-grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=Artix
-grub-mkconfig -o /boot/grub/grub.cfg
