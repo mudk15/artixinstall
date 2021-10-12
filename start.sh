@@ -9,7 +9,7 @@ echo "print console font (cyr-sun16 for russian)"
 read -p "Your choice: " consolfont
 echo "print locale (for example ru_RU)"
 read -p "Your choice: " local
-echo "print timezone (example Europe/Moscow)
+echo "print timezone (example Europe/Moscow)"
 read -p "Your choice: " tmzn
 echo "Are you sure?"
 echo "yes - contunue"
@@ -31,7 +31,7 @@ esac
 echo "127.0.1.1 localhost.localdomain $hostname" >> /mnt/etc/hosts
 echo FONT=$consolfont > /mnt/etc/vconsole.conf
 echo LANG="$local.UTF-8" > /mnt/etc/locale.conf
-echo LC_COLLATE="C" >> /mnt/etc/locale.conf
+echo "LC_COLLATE="C"" >> /mnt/etc/locale.conf
 fstabgen -U /mnt >> /mnt/etc/fstab
   # язык
 if [ $local != en_US ]
@@ -52,3 +52,4 @@ artix-chroot /mnt
 exit
 ;;
 esac
+exit
