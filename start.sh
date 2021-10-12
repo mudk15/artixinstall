@@ -11,9 +11,9 @@ echo "print locale (for example ru_RU)"
 read -p "Your choice: " local
 echo "print timezone (example Europe/Moscow)
 read -p "Your choice: " tmzn
-echo "Are you sure?
-yes - contunue
-any - exit with no changes"
+echo "Are you sure?"
+echo "yes - contunue"
+echo "any - exit with no changes"
 read -p "Your choice: " answer
 case $answer in
 yes)
