@@ -24,7 +24,7 @@ passwd
 echo print username
 read usrnm
 useradd -m -g users -G wheel -s /bin/bash \$usrnm
-echo %wheel ALL=(ALL) ALL >> /etc/sudoers
+echo \"%wheel ALL=(ALL) ALL\" >> /etc/sudoers
 echo print pass for \$usrnm
 passwd \$usrnm
 case \$initsys in
