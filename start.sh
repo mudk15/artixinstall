@@ -44,7 +44,6 @@ fi
 echo initsys=$initsys >> ./continue.sh
 echo tmzn=$tmzn >> ./continue.sh
 ./telo.sh
-echo $var >> ./continue.sh
 mv ./continue.sh /mnt/continue.sh
 artix-chroot /mnt
 ;;
