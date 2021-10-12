@@ -2,7 +2,7 @@
 echo "ln -sf /usr/share/zoneinfo/$tmzn /etc/localtime
 hwclock --systohc
 locale-gen
-echo "your system is 1 - BIOS, 2 - EFI?"
+echo your system is 1 - BIOS, 2 - EFI?
 read syst
 case $syst in
 1)
