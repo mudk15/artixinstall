@@ -3,29 +3,29 @@ echo "ln -sf /usr/share/zoneinfo/$tmzn /etc/localtime
 hwclock --systohc
 locale-gen
 echo "your system is 1 - BIOS, 2 - EFI?"
-read -p "Your choice: " system
-case $system in
+read syst
+case $syst in
 1)
-echo "choice disk for bios"
+echo choice disk for bios
 lsblk
-read -p "Your choice: " diskbios
+read diskbios
 grub-install --recheck $diskbios
 grub-mkconfig -o /boot/grub/grub.cfg
 ;;
 2)
-echo "print bootloader id"
-read -p "Enter: " bootid
+echo print bootloader id
+read bootid
 grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=$bootid
 grub-mkconfig -o /boot/grub/grub.cfg
 ;;
 esac
-echo "print root password"
+echo print root password
 passwd
-echo "print username"
-read -p "Your user is: " usrnm
+echo print username
+read usrnm
 useradd -m -g users -G wheel -s /bin/bash $usrnm
 echo %wheel ALL=(ALL) ALL >> /etc/sudoers
-echo "print pass for $usrnm"
+echo print pass for $usrnm
 passwd $usrnm
 case $initsys in
 runit)
