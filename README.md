@@ -7,5 +7,7 @@
 2. из под хрута запусть continue.sh
 
 дальше exit
+
 umount -R /mnt
+
 reboot
