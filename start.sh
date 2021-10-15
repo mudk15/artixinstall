@@ -45,7 +45,7 @@ echo initsys=$initsys >> ./continue.sh
 echo tmzn=$tmzn >> ./continue.sh
 ./telo.sh
 mv ./continue.sh /mnt/continue.sh
-artix-chroot /mnt
+artix-chroot /mnt -c 'bash /continue.sh'
 ;;
 *)
 # любой другой ответ
