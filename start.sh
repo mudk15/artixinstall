@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "print init system (runit and openrc only for now)"
+echo "print init system (runit and openrc only for now (experemental - s6)"
 read -p "Your choice: " initsys
 echo "print kernel (linux, linux-zen, linux-lts)"
 read -p "Your choice: " kernel
@@ -11,6 +11,11 @@ echo "print locale (for example ru_RU)"
 read -p "Your choice: " local
 echo "print timezone (example Europe/Moscow)"
 read -p "Your choice: " tmzn
+echo "print timezone (netman, connman, wpa_supplicant, none)"
+read -p "Your choice: " netw
+read -p "Extra packages? (e.g: nano, vim, sway): " extra
+echo "Mountpoint (e.g: mnt)"
+read -p "Your choice: " mnt
 echo "Are you sure?"
 echo "yes - contunue"
 echo "any - exit with no changes"
@@ -18,7 +23,8 @@ read -p "Your choice: " answer
 case $answer in
 yes)
 # пошло говно по трубам (yes)
-basestrap /mnt base base-devel $initsys elogind-$initsys networkmanager-$initsys $kernel $kernel-headers linux-firmware grub os-prober efibootmgr sudo nano
+# if yes
+basestrap $mnt base base-devel $initsys elogind-$initsys $netw-$initsys $kernel $kernel-headers linux-firmware grub os-prober efibootmgr sudo dhcpcd $extra
 case $initsys in
 runit)
 echo $hostname > /mnt/etc/hostname
@@ -34,6 +40,7 @@ echo LANG="$local.UTF-8" > /mnt/etc/locale.conf
 echo "LC_COLLATE="C"" >> /mnt/etc/locale.conf
 fstabgen -U /mnt >> /mnt/etc/fstab
   # язык
+  # lang
 if [ $local != en_US ]
 then
 echo $local.UTF-8 UTF-8 >> /mnt/etc/locale.gen
@@ -49,6 +56,7 @@ artix-chroot /mnt -c 'bash /continue.sh'
 ;;
 *)
 # любой другой ответ
+# if not yes
 exit
 ;;
 esac
