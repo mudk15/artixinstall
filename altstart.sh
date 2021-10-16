@@ -47,6 +47,10 @@
         #CHOICE-NETWORK-GRAPHIC
         #CHOICE-NETWORK-CODE
 
+    #CHOICE-EXTRA-1
+        #CHOICE-EXTRA-GRAPHIC
+        #CHOICE-EXTRA-CODE
+
     #CHOICE-RESULT-1
         #CHOICE-RESULT-GRAPHIC
 
@@ -59,6 +63,7 @@
             #INSTALL-BASESTRAP-NETWORK
             #INSTALL-BASESTRAP-KERNEL
             #INSTALL-BASESTRAP-GRUB
+            #INSTALL-BASESTRAP-EXTRA
 
         #INSTALL-HOSTNAME
         #INSTALL-HOSTS
@@ -85,22 +90,33 @@
 clear
 echo "
     ╔══════════════════════════════════════════════════════════════╗
-    ║                                                              ║
-    ║  your choice                                                 ║
-    ║                                                              ║
+
+       your choice
+
+
+        init system             - $initsys
+        kernel                  - $kernel
+        hostname                - $hostname
+        console font            - $consolfont
+        locale                  - $local
+        timezone                - $tmzn
+        user                    - $usrnm
+        system                  - $syst
+        (EFI) bootloader name   - $bootid
+        (BIOS) disk for grub    - $diskbios
+        network                 - $ntwk
+        additional packages     - $extrpkg
+
     ╚══════════════════════════════════════════════════════════════╝
-
-
-
     ╔══════════════════════════════════════════════════════════════╗
-    ║                                                              ║
-    ║  choose init system                                          ║
-    ║                                                              ║
-    ║    1) - runit                                                ║
-    ║    2) - openrc                                               ║
-    ║    any) - exit without save                                  ║
-    ║    (only runit and openrc for now)                           ║
-    ║                                                              ║
+
+       choose init system
+
+         1) - runit
+         2) - openrc
+         any) - exit without save
+         (only runit and openrc for now)
+
     ╚══════════════════════════════════════════════════════════════╝
 
 "
@@ -119,6 +135,7 @@ read -p "       Your choice: " initsys
     echo " "
     ;;
     *)
+    clear
     exit
     ;;
     esac
@@ -127,21 +144,33 @@ read -p "       Your choice: " initsys
 clear
 echo "
     ╔══════════════════════════════════════════════════════════════╗
-    ║                                                              ║
-    ║  your choice                                                 ║
-    ║                                                              ║
-    ╚══════════════════════════════════════════════════════════════╝
+
+       your choice
+
 
         init system             - $initsys
+        kernel                  - $kernel
+        hostname                - $hostname
+        console font            - $consolfont
+        locale                  - $local
+        timezone                - $tmzn
+        user                    - $usrnm
+        system                  - $syst
+        (EFI) bootloader name   - $bootid
+        (BIOS) disk for grub    - $diskbios
+        network                 - $ntwk
+        additional packages     - $extrpkg
 
+    ╚══════════════════════════════════════════════════════════════╝
     ╔══════════════════════════════════════════════════════════════╗
-    ║                                                              ║
-    ║  choose kernel                                               ║
-    ║    1) - linux                                                ║
-    ║    2) - linux-zen                                            ║
-    ║    3) - linux-lts                                            ║
-    ║    any) - exit without save                                  ║
-    ║                                                              ║
+
+       choose kernel
+
+         1) - linux
+         2) - linux-zen
+         3) - linux-lts
+         any) - exit without save
+
     ╚══════════════════════════════════════════════════════════════╝
 
 "
@@ -164,6 +193,7 @@ read -p "       Your choice: " kernel
     echo " "
     ;;
     *)
+    clear
     exit
     ;;
     esac
@@ -172,19 +202,33 @@ read -p "       Your choice: " kernel
 clear
 echo "
     ╔══════════════════════════════════════════════════════════════╗
-    ║                                                              ║
-    ║  your choice                                                 ║
-    ║                                                              ║
-    ╚══════════════════════════════════════════════════════════════╝
+
+       your choice
+
 
         init system             - $initsys
         kernel                  - $kernel
+        hostname                - $hostname
+        console font            - $consolfont
+        locale                  - $local
+        timezone                - $tmzn
+        user                    - $usrnm
+        system                  - $syst
+        (EFI) bootloader name   - $bootid
+        (BIOS) disk for grub    - $diskbios
+        network                 - $ntwk
+        additional packages     - $extrpkg
 
+    ╚══════════════════════════════════════════════════════════════╝
     ╔══════════════════════════════════════════════════════════════╗
-    ║                                                              ║
-    ║  print hostname                                              ║
-    ║    or q) - exit without save                                 ║
-    ║                                                              ║
+
+       print hostname
+
+         or
+         q) - exit without save
+
+
+
     ╚══════════════════════════════════════════════════════════════╝
 
 "
@@ -192,6 +236,7 @@ echo "
 read -p "       Your choice: " hostname
     if [ $hostname = q ]
     then
+    clear
     exit
     fi
 #CHOICE-CONSOLFONT-1
@@ -199,22 +244,33 @@ read -p "       Your choice: " hostname
 clear
 echo "
     ╔══════════════════════════════════════════════════════════════╗
-    ║                                                              ║
-    ║  your choice                                                 ║
-    ║                                                              ║
-    ╚══════════════════════════════════════════════════════════════╝
+
+       your choice
+
 
         init system             - $initsys
         kernel                  - $kernel
         hostname                - $hostname
+        console font            - $consolfont
+        locale                  - $local
+        timezone                - $tmzn
+        user                    - $usrnm
+        system                  - $syst
+        (EFI) bootloader name   - $bootid
+        (BIOS) disk for grub    - $diskbios
+        network                 - $ntwk
+        additional packages     - $extrpkg
 
+    ╚══════════════════════════════════════════════════════════════╝
     ╔══════════════════════════════════════════════════════════════╗
-    ║                                                              ║
-    ║  print console font (cyr-sun16 for russian)                  ║
-    ║    or                                                        ║
-    ║    s) - skip                                                 ║
-    ║    q) - exit without save                                    ║
-    ║                                                              ║
+
+       print console font (cyr-sun16 for russian)
+
+         or
+         s) - skip
+         q) - exit without save
+
+
     ╚══════════════════════════════════════════════════════════════╝
 
 "
@@ -222,6 +278,7 @@ echo "
 read -p "       Your choice: " consolfont
     if [ $consolfont = q ]
     then
+    clear
     exit
     fi
     if [ $consolfont = s ]
@@ -233,22 +290,33 @@ read -p "       Your choice: " consolfont
 clear
 echo "
     ╔══════════════════════════════════════════════════════════════╗
-    ║                                                              ║
-    ║  your choice                                                 ║
-    ║                                                              ║
-    ╚══════════════════════════════════════════════════════════════╝
+
+       your choice
+
 
         init system             - $initsys
         kernel                  - $kernel
         hostname                - $hostname
         console font            - $consolfont
+        locale                  - $local
+        timezone                - $tmzn
+        user                    - $usrnm
+        system                  - $syst
+        (EFI) bootloader name   - $bootid
+        (BIOS) disk for grub    - $diskbios
+        network                 - $ntwk
+        additional packages     - $extrpkg
 
+    ╚══════════════════════════════════════════════════════════════╝
     ╔══════════════════════════════════════════════════════════════╗
-    ║                                                              ║
-    ║  print locale (for example ru_RU)                            ║
-    ║    s) - skip (default en_US)                                 ║
-    ║    q) - exit without save                                    ║
-    ║                                                              ║
+
+       print locale (for example ru_RU)
+
+         or
+         s) - skip (default en_US)
+         q) - exit without save
+
+
     ╚══════════════════════════════════════════════════════════════╝
 
 "
@@ -256,6 +324,7 @@ echo "
 read -p "       Your choice: " local
     if [ $local = q ]
     then
+    clear
     exit
     fi
     if [ $local = s ]
@@ -267,23 +336,33 @@ read -p "       Your choice: " local
 clear
 echo "
     ╔══════════════════════════════════════════════════════════════╗
-    ║                                                              ║
-    ║  your choice                                                 ║
-    ║                                                              ║
-    ╚══════════════════════════════════════════════════════════════╝
+
+       your choice
+
 
         init system             - $initsys
         kernel                  - $kernel
         hostname                - $hostname
         console font            - $consolfont
         locale                  - $local
+        timezone                - $tmzn
+        user                    - $usrnm
+        system                  - $syst
+        (EFI) bootloader name   - $bootid
+        (BIOS) disk for grub    - $diskbios
+        network                 - $ntwk
+        additional packages     - $extrpkg
 
+    ╚══════════════════════════════════════════════════════════════╝
     ╔══════════════════════════════════════════════════════════════╗
-    ║                                                              ║
-    ║  print timezone (example Europe/Moscow)                      ║
-    ║    s) - skip (default Europe/London)                         ║
-    ║    q) - exit without save                                    ║
-    ║                                                              ║
+
+       print timezone (example Europe/Moscow)
+
+         or
+         s) - skip (default Europe/London)
+         q) - exit without save
+
+
     ╚══════════════════════════════════════════════════════════════╝
 
 "
@@ -291,6 +370,7 @@ echo "
 read -p "       Your choice: " tmzn
     if [ $tmzn = q ]
     then
+    clear
     exit
     fi
     if [ $tmzn = s ]
@@ -302,41 +382,9 @@ read -p "       Your choice: " tmzn
 clear
 echo "
     ╔══════════════════════════════════════════════════════════════╗
-    ║                                                              ║
-    ║  your choice                                                 ║
-    ║                                                              ║
-    ╚══════════════════════════════════════════════════════════════╝
 
-        init system             - $initsys
-        kernel                  - $kernel
-        hostname                - $hostname
-        console font            - $consolfont
-        locale                  - $local
-        timezone                - $tmzn
+       your choice
 
-    ╔══════════════════════════════════════════════════════════════╗
-    ║                                                              ║
-    ║  print username                                              ║
-    ║    or q) - exit without save                                 ║
-    ║                                                              ║
-    ╚══════════════════════════════════════════════════════════════╝
-
-"
-#CHOICE-USER-CODE
-read -p "       Your choice: " usrnm
-    if [ $usrnm = q ]
-    then
-    exit
-    fi
-#CHOICE-SYSTEM-1
-#CHOICE-SYSTEM-GRAPHIC
-clear
-echo "
-    ╔══════════════════════════════════════════════════════════════╗
-    ║                                                              ║
-    ║  your choice                                                 ║
-    ║                                                              ║
-    ╚══════════════════════════════════════════════════════════════╝
 
         init system             - $initsys
         kernel                  - $kernel
@@ -345,14 +393,64 @@ echo "
         locale                  - $local
         timezone                - $tmzn
         user                    - $usrnm
+        system                  - $syst
+        (EFI) bootloader name   - $bootid
+        (BIOS) disk for grub    - $diskbios
+        network                 - $ntwk
+        additional packages     - $extrpkg
 
+    ╚══════════════════════════════════════════════════════════════╝
     ╔══════════════════════════════════════════════════════════════╗
-    ║                                                              ║
-    ║  your system is                                              ║
-    ║    1) - BIOS                                                 ║
-    ║    2) - EFI                                                  ║
-    ║    any) - exit without save                                  ║
-    ║                                                              ║
+
+       print username
+
+         or
+         q) - exit without save
+
+
+
+    ╚══════════════════════════════════════════════════════════════╝
+
+"
+#CHOICE-USER-CODE
+read -p "       Your choice: " usrnm
+    if [ $usrnm = q ]
+    then
+    clear
+    exit
+    fi
+#CHOICE-SYSTEM-1
+#CHOICE-SYSTEM-GRAPHIC
+clear
+echo "
+    ╔══════════════════════════════════════════════════════════════╗
+
+       your choice
+
+
+        init system             - $initsys
+        kernel                  - $kernel
+        hostname                - $hostname
+        console font            - $consolfont
+        locale                  - $local
+        timezone                - $tmzn
+        user                    - $usrnm
+        system                  - $syst
+        (EFI) bootloader name   - $bootid
+        (BIOS) disk for grub    - $diskbios
+        network                 - $ntwk
+        additional packages     - $extrpkg
+
+    ╚══════════════════════════════════════════════════════════════╝
+    ╔══════════════════════════════════════════════════════════════╗
+
+       your system is
+
+         1) - BIOS
+         2) - EFI
+         any) - exit without save
+
+
     ╚══════════════════════════════════════════════════════════════╝
 
 "
@@ -368,10 +466,9 @@ echo " "
     lsblk
     echo "
     ╔══════════════════════════════════════════════════════════════╗
-    ║                                                              ║
-    ║  your choice                                                 ║
-    ║                                                              ║
-    ╚══════════════════════════════════════════════════════════════╝
+
+       your choice
+
 
         init system             - $initsys
         kernel                  - $kernel
@@ -381,20 +478,30 @@ echo " "
         timezone                - $tmzn
         user                    - $usrnm
         system                  - $syst
+        (EFI) bootloader name   - $bootid
+        (BIOS) disk for grub    - $diskbios
+        network                 - $ntwk
+        additional packages     - $extrpkg
 
+    ╚══════════════════════════════════════════════════════════════╝
     ╔══════════════════════════════════════════════════════════════╗
-    ║                                                              ║
-    ║  choice disk for grub                                        ║
-    ║    or exit) - exit without save                              ║
-    ║                                                              ║
+
+       choice disk for grub
+
+         or
+         q) - exit without save
+
+
+
     ╚══════════════════════════════════════════════════════════════╝
 
     "
     #CHOICE-SYSTEM-CODE-BIOS-CODE
     read -p "       Your choice: " diskbios
     echo " "
-        if [ $diskbios = exit ]
+        if [ $diskbios = q ]
         then
+        clear
         exit
         else
         echo "you choose $syst"
@@ -409,93 +516,9 @@ echo " "
     syst=EFI
     echo "
     ╔══════════════════════════════════════════════════════════════╗
-    ║                                                              ║
-    ║  your choice                                                 ║
-    ║                                                              ║
-    ╚══════════════════════════════════════════════════════════════╝
 
-        init system             - $initsys
-        kernel                  - $kernel
-        hostname                - $hostname
-        console font            - $consolfont
-        locale                  - $local
-        timezone                - $tmzn
-        user                    - $usrnm
-        system                  - $syst
+       your choice
 
-    ╔══════════════════════════════════════════════════════════════╗
-    ║                                                              ║
-    ║  print bootloader name                                       ║
-    ║    or exit) - exit without save                              ║
-    ║                                                              ║
-    ╚══════════════════════════════════════════════════════════════╝
-
-    "
-    #CHOICE-SYSTEM-CODE-EFI-CODE
-    read -p "       Your choice: " bootid
-    echo " "
-        if [ $bootid = exit ]
-        then
-        exit
-        else
-        echo "you choose $syst"
-        echo "your bootloader name $bootid"
-        echo " "
-        fi
-    ;;
-    *)
-    exit
-    ;;
-    esac
-#CHOICE-NETWORK-1
-#CHOICE-NETWORK-GRAPHIC
-clear
-echo "
-    ╔══════════════════════════════════════════════════════════════╗
-    ║                                                              ║
-    ║  your choice                                                 ║
-    ║                                                              ║
-    ╚══════════════════════════════════════════════════════════════╝
-
-        init system             - $initsys
-        kernel                  - $kernel
-        hostname                - $hostname
-        console font            - $consolfont
-        locale                  - $local
-        timezone                - $tmzn
-        user                    - $usrnm
-        system                  - $syst
-        (EFI) bootloader name   - $bootid
-        (BIOS) disk for grub    - $diskbios
-
-    ╔══════════════════════════════════════════════════════════════╗
-    ║                                                              ║
-    ║  print network manager                                       ║
-    ║    s) - skip (networkmanager)                                ║
-    ║    q) - exit with no changes                                 ║
-    ║                                                              ║
-    ╚══════════════════════════════════════════════════════════════╝
-
-"
-#CHOICE-NETWORK-CODE
-read -p "       Your choice: " ntwk
-    if [ $ntwk = q ]
-    then
-    exit
-    fi
-    if [ $ntwk = s ]
-    then
-    ntwk=networkmanager
-    fi
-#CHOICE-RESULT-1
-#CHOICE-RESULT-GRAPHIC
-clear
-echo "
-    ╔══════════════════════════════════════════════════════════════╗
-    ║                                                              ║
-    ║  your choice                                                 ║
-    ║                                                              ║
-    ╚══════════════════════════════════════════════════════════════╝
 
         init system             - $initsys
         kernel                  - $kernel
@@ -508,13 +531,163 @@ echo "
         (EFI) bootloader name   - $bootid
         (BIOS) disk for grub    - $diskbios
         network                 - $ntwk
+        additional packages     - $extrpkg
 
+    ╚══════════════════════════════════════════════════════════════╝
     ╔══════════════════════════════════════════════════════════════╗
-    ║                                                              ║
-    ║  Are you sure?                                               ║
-    ║    yes) - contunue                                           ║
-    ║    any) - exit with no changes                               ║
-    ║                                                              ║
+
+       print bootloader name
+
+         or
+         q) - exit without save
+
+
+
+    ╚══════════════════════════════════════════════════════════════╝
+
+    "
+    #CHOICE-SYSTEM-CODE-EFI-CODE
+    read -p "       Your choice: " bootid
+    echo " "
+        if [ $bootid = q ]
+        then
+        clear
+        exit
+        else
+        echo "you choose $syst"
+        echo "your bootloader name $bootid"
+        echo " "
+        fi
+    ;;
+    *)
+    clear
+    exit
+    ;;
+    esac
+#CHOICE-NETWORK-1
+#CHOICE-NETWORK-GRAPHIC
+clear
+echo "
+    ╔══════════════════════════════════════════════════════════════╗
+
+       your choice
+
+
+        init system             - $initsys
+        kernel                  - $kernel
+        hostname                - $hostname
+        console font            - $consolfont
+        locale                  - $local
+        timezone                - $tmzn
+        user                    - $usrnm
+        system                  - $syst
+        (EFI) bootloader name   - $bootid
+        (BIOS) disk for grub    - $diskbios
+        network                 - $ntwk
+        additional packages     - $extrpkg
+
+    ╚══════════════════════════════════════════════════════════════╝
+    ╔══════════════════════════════════════════════════════════════╗
+
+       print network manager
+
+         or
+         s) - skip (networkmanager)
+         q) - exit with no changes
+
+
+    ╚══════════════════════════════════════════════════════════════╝
+
+"
+#CHOICE-NETWORK-CODE
+read -p "       Your choice: " ntwk
+    if [ $ntwk = q ]
+    then
+    clear
+    exit
+    fi
+    if [ $ntwk = s ]
+    then
+    ntwk=networkmanager
+    fi
+#CHOICE-EXTRA-1
+#CHOICE-EXTRA-GRAPHIC
+clear
+echo "
+    ╔══════════════════════════════════════════════════════════════╗
+
+       your choice
+
+
+        init system             - $initsys
+        kernel                  - $kernel
+        hostname                - $hostname
+        console font            - $consolfont
+        locale                  - $local
+        timezone                - $tmzn
+        user                    - $usrnm
+        system                  - $syst
+        (EFI) bootloader name   - $bootid
+        (BIOS) disk for grub    - $diskbios
+        network                 - $ntwk
+        additional packages     - $extrpkg
+
+    ╚══════════════════════════════════════════════════════════════╝
+    ╔══════════════════════════════════════════════════════════════╗
+
+       print additional packages
+
+         or
+         s) - skip (sudo nano)
+         q) - exit with no changes
+
+
+    ╚══════════════════════════════════════════════════════════════╝
+
+"
+#CHOICE-EXTRA-CODE
+read -p "       Your choice: " extrpkg
+    if [ $extrpkg = q ]
+    then
+    clear
+    exit
+    fi
+    if [ $extrpkg = s ]
+    then
+    extrpkg="sudo nano"
+    fi
+#CHOICE-RESULT-1
+#CHOICE-RESULT-GRAPHIC
+clear
+echo "
+    ╔══════════════════════════════════════════════════════════════╗
+
+       your choice
+
+
+        init system             - $initsys
+        kernel                  - $kernel
+        hostname                - $hostname
+        console font            - $consolfont
+        locale                  - $local
+        timezone                - $tmzn
+        user                    - $usrnm
+        system                  - $syst
+        (EFI) bootloader name   - $bootid
+        (BIOS) disk for grub    - $diskbios
+        network                 - $ntwk
+        additional packages     - $extrpkg
+
+    ╚══════════════════════════════════════════════════════════════╝
+    ╔══════════════════════════════════════════════════════════════╗
+
+       Are you sure?
+
+         yes) - contunue
+         any) - exit with no changes
+
+
+
     ╚══════════════════════════════════════════════════════════════╝
 
 "
@@ -528,11 +701,13 @@ then
     #INSTALL-BASESTRAP-INIT
     basestrap /mnt base base-devel $initsys elogind-$initsys
     #INSTALL-BASESTRAP-NETWORK
-    basestrap /mnt $ntwk"-"$initsys
+    basestrap /mnt $ntwk"-"$initsys dhcpd
     #INSTALL-BASESTRAP-KERNEL
     basestrap /mnt $kernel $kernel-headers linux-firmware
     #INSTALL-BASESTRAP-GRUB
-    basestrap /mnt grub os-prober efibootmgr sudo nano
+    basestrap /mnt grub os-prober efibootmgr
+    #INSTALL-BASESTRAP-EXTRA
+    basestrap /mnt $extrpkg
     #INSTALL-HOSTNAME
         case $initsys in
         runit)
@@ -579,23 +754,44 @@ then
         ;;
         esac
     #INSTALL-ROOT-PASSWD
-    echo print root password
+    clear
+    echo "
+    ╔══════════════════════════════════════════════════════════════╗
+
+       print root password
+
+    ╚══════════════════════════════════════════════════════════════╝
+"
     artix-chroot /mnt passwd
     #INSTALL-USER-1
     #INSTALL-USER-ADD
     artix-chroot /mnt useradd -m -g users -G wheel -s /bin/bash $usrnm
     echo "%wheel ALL=(ALL) ALL" >> /mnt/etc/sudoers
     #INSTALL-USER-PASSWD
+    clear
+    echo "
+    ╔══════════════════════════════════════════════════════════════╗
+
+       print $usrnm password
+
+    ╚══════════════════════════════════════════════════════════════╝
+"
     echo print pass for $usrnm
     artix-chroot /mnt passwd $usrnm
     #INSTALL-AUTOSTART-1
     #INSTALL-AUTOSTART-NETWORK
     case $initsys in
         runit)
-        artix-chroot /mnt ln -s /etc/runit/sv/NetworkManager/ /etc/runit/runsvdir/default
+        if ( $ntwk = networkmanager )
+        then
+        artix-chroot /mnt ln -s /etc/runit/sv/NetworkManager /etc/runit/runsvdir/default
+        fi
         ;;
         openrc)
+        if ( $ntwk = networkmanager )
+        then
         artix-chroot /mnt rc-update add NetworkManager
+        fi
         ;;
     esac
     #INSTALL-ENDING
@@ -603,6 +799,7 @@ then
     reboot
 else
 #INSTALL-ANS-ANY
+    clear
     exit
 fi
 exit
