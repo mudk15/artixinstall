@@ -32,16 +32,12 @@
         #CHOICE-USER-CODE
 
     #CHOICE-SYSTEM-1
-        #CHOICE-SYSTEM-GRAPHIC
-        #CHOICE-SYSTEM-CODE-1
-
-            #CHOICE-SYSTEM-BIOS-1
-                #CHOICE-SYSTEM-BIOS-GRAPHIC
-                #CHOICE-SYSTEM-BIOS-CODE
-
-            #CHOICE-SYSTEM-EFI-1
-                #CHOICE-SYSTEM-EFI-GRAPHIC
-                #CHOICE-SYSTEM-EFI-CODE
+        #CHOICE-SYSTEM-BIOS-1
+            #CHOICE-SYSTEM-BIOS-GRAPHIC
+            #CHOICE-SYSTEM-BIOS-CODE
+        #CHOICE-SYSTEM-EFI-1
+            #CHOICE-SYSTEM-EFI-GRAPHIC
+            #CHOICE-SYSTEM-EFI-CODE
 
     #CHOICE-NETWORK-1
         #CHOICE-NETWORK-GRAPHIC
@@ -83,7 +79,13 @@
         #INSTALL-AUTOSTART-NETWORK
         #INSTALL-ENDING
     #INSTALL-ANS-ANY
-
+syst=$(cat /sys/firmware/efi/fw_platform_size)
+if [ $syst = 64 ]
+then
+syst=EFI
+else
+syst=BIOS
+fi
 #CHOICE-1
 #CHOICE-INIT-1
 #CHOICE-INIT-GRAPHIC
@@ -420,49 +422,11 @@ read -p "       Your choice: " usrnm
     exit
     fi
 #CHOICE-SYSTEM-1
-#CHOICE-SYSTEM-GRAPHIC
-clear
-echo "
-    ╔══════════════════════════════════════════════════════════════╗
-
-       your choice
-
-
-        init system             - $initsys
-        kernel                  - $kernel
-        hostname                - $hostname
-        console font            - $consolfont
-        locale                  - $local
-        timezone                - $tmzn
-        user                    - $usrnm
-        system                  - $syst
-        (EFI) bootloader name   - $bootid
-        (BIOS) disk for grub    - $diskbios
-        network                 - $ntwk
-        additional packages     - $extrpkg
-
-    ╚══════════════════════════════════════════════════════════════╝
-    ╔══════════════════════════════════════════════════════════════╗
-
-       your system is
-
-         1) - BIOS
-         2) - EFI
-         any) - exit without save
-
-
-    ╚══════════════════════════════════════════════════════════════╝
-
-"
-#CHOICE-SYSTEM-CODE-1
-read -p "       Your choice: " syst
-echo " "
     case $syst in
-    1)
-    #CHOICE-SYSTEM-CODE-BIOS-1
-    #CHOICE-SYSTEM-CODE-BIOS-GRAPHIC
+    BIOS)
+    #CHOICE-SYSTEM-BIOS-1
+    #CHOICE-SYSTEM-BIOS-GRAPHIC
     clear
-    syst=BIOS
     lsblk
     echo "
     ╔══════════════════════════════════════════════════════════════╗
@@ -496,7 +460,7 @@ echo " "
     ╚══════════════════════════════════════════════════════════════╝
 
     "
-    #CHOICE-SYSTEM-CODE-BIOS-CODE
+    #CHOICE-SYSTEM--BIOS-CODE
     read -p "       Your choice: " diskbios
     echo " "
         if [ $diskbios = q ]
@@ -509,11 +473,10 @@ echo " "
         echo " "
         fi
     ;;
-    2)
-    #CHOICE-SYSTEM-CODE-EFI-1
-    #CHOICE-SYSTEM-CODE-EFI-GRAPHIC
+    EFI)
+    #CHOICE-SYSTEM--EFI-1
+    #CHOICE-SYSTEM--EFI-GRAPHIC
     clear
-    syst=EFI
     echo "
     ╔══════════════════════════════════════════════════════════════╗
 
@@ -546,7 +509,7 @@ echo " "
     ╚══════════════════════════════════════════════════════════════╝
 
     "
-    #CHOICE-SYSTEM-CODE-EFI-CODE
+    #CHOICE-SYSTEM--EFI-CODE
     read -p "       Your choice: " bootid
     echo " "
         if [ $bootid = q ]
@@ -782,16 +745,24 @@ then
     #INSTALL-AUTOSTART-NETWORK
     case $initsys in
         runit)
-        if ( $ntwk = networkmanager )
-        then
-        artix-chroot /mnt ln -s /etc/runit/sv/NetworkManager /etc/runit/runsvdir/default
-        fi
+        case $ntwk in
+            networkmanager)
+            artix-chroot /mnt ln -s /etc/runit/sv/NetworkManager /etc/runit/runsvdir/default
+            ;;
+            connman)
+            artix-chroot /mnt ln -s etc/runit/sv/connmand/ /etc/runit/runsvdir/default
+            ;;
+        esac
         ;;
         openrc)
-        if ( $ntwk = networkmanager )
-        then
-        artix-chroot /mnt rc-update add NetworkManager
-        fi
+        case $ntwk in
+            networkmanager)
+            artix-chroot /mnt rc-update add NetworkManager
+            ;;
+            connman)
+            artix-chroot /mnt rc-update add connmand
+            ;;
+        esac
         ;;
     esac
     #INSTALL-ENDING
