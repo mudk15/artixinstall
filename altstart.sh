@@ -458,7 +458,15 @@ yes)
     #INSTALL-CONSOLFONT
         if [ $consolfont != skipped ]
         then
-        echo FONT=$consolfont > /mnt/etc/vconsole.conf
+        case $initsys in
+            runit)
+            echo "FONT=$consolfont" > /mnt/etc/vconsole.conf
+            ;;
+            openrc)
+            fstabgen -U /mnt rc-update add consolefont boot
+            echo "consolefont=\"$consolfont\"" > /mnt/etc/conf.d/consolefont
+            ;;
+            esac
         fi
     #INSTALL-LOCAL
     echo LANG="$local.UTF-8" > /mnt/etc/locale.conf
