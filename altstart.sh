@@ -463,7 +463,7 @@ yes)
             echo "FONT=$consolfont" > /mnt/etc/vconsole.conf
             ;;
             openrc)
-            fstabgen -U /mnt rc-update add consolefont boot
+            artix-chroot /mnt rc-update add consolefont boot
             echo "consolefont=\"$consolfont\"" > /mnt/etc/conf.d/consolefont
             ;;
             esac
