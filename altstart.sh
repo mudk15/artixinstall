@@ -664,7 +664,7 @@ then
     #INSTALL-BASESTRAP-INIT
     basestrap /mnt base base-devel $initsys elogind-$initsys
     #INSTALL-BASESTRAP-NETWORK
-    basestrap /mnt $ntwk"-"$initsys dhcpd
+    basestrap /mnt $ntwk $ntwk"-"$initsys dhcpcd
     #INSTALL-BASESTRAP-KERNEL
     basestrap /mnt $kernel $kernel-headers linux-firmware
     #INSTALL-BASESTRAP-GRUB
