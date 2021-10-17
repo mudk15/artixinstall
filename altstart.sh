@@ -747,10 +747,10 @@ then
         runit)
         case $ntwk in
             networkmanager)
-            artix-chroot /mnt ln -s /etc/runit/sv/NetworkManager /etc/runit/runsvdir/default
+            artix-chroot /mnt "ln -s /etc/runit/sv/NetworkManager /etc/runit/runsvdir/default"
             ;;
             connman)
-            artix-chroot /mnt ln -s etc/runit/sv/connmand/ /etc/runit/runsvdir/default
+            artix-chroot /mnt "ln -s etc/runit/sv/connmand/ /etc/runit/runsvdir/default"
             ;;
         esac
         ;;
