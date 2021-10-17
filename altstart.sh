@@ -539,9 +539,32 @@ yes)
         ;;
     esac
     #INSTALL-ENDING
-    umount -R /mnt
-    clear
-    reboot
+    choiceanswer='
+       Do you want reboot or...
+
+         1)Enter livecd
+         2)Enter artix-chroot
+         any) - reboot
+    '
+    printgraph1
+    read -p "       Your choice: " endingchoice
+    case $endingchoice in
+        1)
+        clear
+        exit
+        ;;
+        2)
+        clear
+        artix-chroot /mnt
+        umount -R /mnt
+        reboot
+        ;;
+        *)
+        clear
+        umount -R /mnt
+        reboot
+        ;;
+    esac
 ;;
 *)
 #INSTALL-ANS-ANY
