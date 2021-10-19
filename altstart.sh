@@ -444,7 +444,7 @@ yes)
     #INSTALL-BASESTRAP-DISPLAY
     if [ $display != skipped ]
     then
-    basestrap /mnt $display $initsys"-"$display
+    basestrap /mnt $display $display"-"$initsys
     fi
     #INSTALL-BASESTRAP-EXTRA
     if [ $extrpkg != skipped ]
