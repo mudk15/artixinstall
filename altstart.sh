@@ -547,7 +547,7 @@ yes)
         ;;
     esac
     #INSTALL-AUTOSTART-DISPLAY
-    if [ $display != skipped }
+    if [ $display != skipped ]
     then
         case $initsys in
         runit)
