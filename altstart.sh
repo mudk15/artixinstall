@@ -28,6 +28,8 @@ else
 echo "        (BIOS) disk for grub    - $diskbios"
 fi
 echo "        network                 - $ntwk
+        desktop environment     - $desktop
+        display manager         - $display
         additional packages     - $extrpkg
 
     ╚══════════════════════════════════════════════════════════════╝"
@@ -65,7 +67,6 @@ read -p "       Your choice: " choic
         fi
     ;;
     no)
-    echo "skip"
     ;;
     *)
     choicexit
@@ -334,14 +335,62 @@ read -p "       Your choice: " ntwk
     then
     ntwk=networkmanager
     fi
-#CHOICE-EXTRA-1
+#CHOICE-DESKTOP
+#CHOICE-DESKTOP-GRAPHIC
+clear
+choiceanswer='
+       print desktop environment
+
+         (gnome, plasma, lxqt, lxde or another)
+         s) - skip
+         leave empty) - exit with no changes
+
+
+'
+printgraph
+printgraph1
+#CHOICE-DESKTOP-CODE
+read -p "       Your choice: " desktop
+    if [ $desktop -z ]
+    then
+    choicexit
+    fi
+    if [ $desktop = s ]
+    then
+    desktop=skipped
+    fi
+#CHOICE-DISPLAY
+#CHOICE-DISPLAY-GRAPHIC
+clear
+choiceanswer='
+       print display manager
+
+         (sddm, lightdm, gdm or another)
+         s) - skip
+         leave empty) - exit with no changes
+
+
+'
+printgraph
+printgraph1
+#CHOICE-DISPLAY-CODE
+read -p "       Your choice: " display
+    if [ $display -z ]
+    then
+    choicexit
+    fi
+    if [ $display = s ]
+    then
+    display=skipped
+    fi
+#CHOICE-EXTRA
 #CHOICE-EXTRA-GRAPHIC
 clear
 choiceanswer='
        print additional packages
 
-         or
-         s) - skip (nano)
+         ( nano, kate, falkon or another)
+         s) - skip
          leave empty) - exit with no changes
 
 
@@ -356,7 +405,7 @@ read -p "       Your choice: " extrpkg
     fi
     if [ $extrpkg = s ]
     then
-    extrpkg=nano
+    extrpkg=skipped
     fi
 #CHOICE-RESULT-1
 #CHOICE-RESULT-GRAPHIC
@@ -387,8 +436,21 @@ yes)
     basestrap /mnt $kernel $kernel-headers linux-firmware
     #INSTALL-BASESTRAP-GRUB
     basestrap /mnt grub os-prober efibootmgr
+    #INSTALL-BASESTRAP-DESKTOP
+    if [ $desktop != skipped ]
+    then
+    basestrap /mnt $desktop
+    fi
+    #INSTALL-BASESTRAP-DISPLAY
+    if [ $display != skipped ]
+    then
+    basestrap /mnt $display $initsys"-"$display
+    fi
     #INSTALL-BASESTRAP-EXTRA
+    if [ $extrpkg != skipped ]
+    then
     basestrap /mnt $extrpkg
+    fi
     #INSTALL-HOSTNAME
         case $initsys in
         runit)
@@ -460,7 +522,7 @@ yes)
     "
     printgraph1
     artix-chroot /mnt passwd $usrnm
-    #INSTALL-AUTOSTART-1
+    #INSTALL-AUTOSTART
     #INSTALL-AUTOSTART-NETWORK
     case $initsys in
         runit)
@@ -484,6 +546,18 @@ yes)
         esac
         ;;
     esac
+    #INSTALL-AUTOSTART-DISPLAY
+    if [ $display != skipped }
+    then
+        case $initsys in
+        runit)
+        artix-chroot /mnt ln -s /etc/runit/sv/$display /etc/runit/runsvdir/default
+        ;;
+        openrc)
+        artix-chroot /mnt rc-update add $display
+        ;;
+        esac
+    fi
     #INSTALL-ENDING
     choiceanswer='
        Do you want reboot or...
