@@ -13,7 +13,7 @@ echo "
        your choice
 
 
-        system type             - $syst
+        bios mode               - $syst
         locale                  - $local
         console font            - $consolfont
         timezone                - $tmzn
@@ -45,6 +45,32 @@ syst=EFI
 else
 syst=BIOS
 fi
+clear
+choiceanswer="
+       script detected $syst mode
+         Do you want change to another?
+         yes) - BIOS > EFI or vice versa
+         no) - skip
+         any) - exit without change
+"
+printgraph1
+read -p "       Your choice: " choic
+    case $choic in
+    yes)
+        if [ $syst = EFI ]
+        then
+        syst=BIOS
+        else
+        syst=EFI
+        fi
+    ;;
+    no)
+    echo "skip"
+    ;;
+    *)
+    choicexit
+    ;;
+    esac
 #CHOICE-1
 #CHOICE-LOCAL-1
 #CHOICE-LOCAL-GRAPHIC
@@ -443,7 +469,7 @@ yes)
             artix-chroot /mnt 'ln -s /etc/runit/sv/NetworkManager /etc/runit/runsvdir/default'
             ;;
             connman)
-            artix-chroot /mnt 'ln -s etc/runit/sv/connmand/ /etc/runit/runsvdir/default'
+            artix-chroot /mnt 'ln -s /etc/runit/sv/connmand/ /etc/runit/runsvdir/default'
             ;;
         esac
         ;;
