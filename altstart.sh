@@ -559,6 +559,7 @@ yes)
         esac
     fi
     #INSTALL-ENDING
+    clear
     choiceanswer='
        Do you want reboot or...
 
