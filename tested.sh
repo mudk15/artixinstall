@@ -659,7 +659,7 @@ done
 ############################################################        BASESTRAP-BASE-INIT
 ################################
 
-basestrap /mnt base base-devel $initsystem $initsystem
+basestrap /mnt base base-devel $initsystem elogind-$initsystem
 
 ############################################################
 ################################        BASESTRAP-NETWORK
@@ -768,12 +768,12 @@ fstabgen -U /mnt >> /mnt/etc/fstab
 
         case $system in
         BIOS)
-        artix-chroot '/mnt grub-install --recheck $biosdisk'
-        artix-chroot '/mnt grub-mkconfig -o /boot/grub/grub.cfg'
+        artix-chroot /mnt grub-install --recheck $biosdisk
+        artix-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
         ;;
         EFI)
-        artix-chroot '/mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=$efiboot'
-        artix-chroot '/mnt grub-mkconfig -o /boot/grub/grub.cfg'
+        artix-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=$efiboot
+        artix-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
         ;;
         esac
 
