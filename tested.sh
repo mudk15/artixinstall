@@ -712,7 +712,7 @@ then
 ########################################################
 ################################        CONSOLEFONT
 
-        if [ $consolefont != skipped ]
+        if [ -n $consolefont ]
         then
         case $initsystem in
             runit)
@@ -720,6 +720,7 @@ then
             ;;
             openrc)
             artix-chroot /mnt rc-update add consolefont boot
+            echo "FONT=$consolefont" > /mnt/etc/vconsole.conf
             echo "consolefont=\"$consolefont\"" > /mnt/etc/conf.d/consolefont
             ;;
             esac
