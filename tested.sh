@@ -659,12 +659,12 @@ done
 ############################################################        BASESTRAP-BASE-INIT
 ################################
 
-basestrap /mnt base base-devel $initsys elogind-$initsys
+basestrap /mnt base base-devel $initsystem $initsystem
 
 ############################################################
 ################################        BASESTRAP-NETWORK
 
-basestrap /mnt $ntwk $ntwk"-"$initsys dhcpcd
+basestrap /mnt $network $network"-"$initsystem dhcpcd
 
 ############################################################
 ################################        BASESTRAP-KERNEL
@@ -681,7 +681,7 @@ basestrap /mnt grub os-prober efibootmgr
 
 if [ -n $desktop ]
 then
-basestrap /mnt $desktop
+basestrap /mnt "$desktop"
 fi
 
 ########################################################
@@ -697,13 +697,13 @@ fi
 
 if [ -n $extrapackages ]
 then
-basestrap /mnt $extrapackages
+basestrap /mnt "$extrapackages"
 fi
 
 ########################################################
 ################################        HOSTNAME
 
-        case $initsys in
+        case $initsystem in
         runit)
         echo $hostname > /mnt/etc/hostname
         ;;
@@ -723,7 +723,7 @@ echo "127.0.1.1 localhost.localdomain $hostname" >> /mnt/etc/hosts
 
         if [ $consolfont != skipped ]
         then
-        case $initsys in
+        case $initsystem in
             runit)
             echo "FONT=$consolfont" > /mnt/etc/vconsole.conf
             ;;
@@ -737,17 +737,17 @@ echo "127.0.1.1 localhost.localdomain $hostname" >> /mnt/etc/hosts
 ########################################################
 ################################        LOCAL
 
-    echo LANG="$local.UTF-8" > /mnt/etc/locale.conf
+    echo LANG="$locale.UTF-8" > /mnt/etc/locale.conf
     echo "LC_COLLATE="C"" >> /mnt/etc/locale.conf
 
 ########################################################
 ################################        LOCALE-GEN
 
-        if [ $local == en_US ]
+        if [ $locale == en_US ]
         then
-        echo $local.UTF-8 UTF-8 >> /mnt/etc/locale.gen
+        echo $locale.UTF-8 UTF-8 >> /mnt/etc/locale.gen
         else
-        echo $local.UTF-8 UTF-8 >> /mnt/etc/locale.gen
+        echo $locale.UTF-8 UTF-8 >> /mnt/etc/locale.gen
         echo en_US.UTF-8 UTF-8 >> /mnt/etc/locale.gen
         fi
         artix-chroot /mnt locale-gen
@@ -760,20 +760,20 @@ fstabgen -U /mnt >> /mnt/etc/fstab
 ########################################################
 ################################        TIMEZONE
 
-    artix-chroot /mnt ln -sf /usr/share/zoneinfo/$tmzn /etc/localtime
+    artix-chroot /mnt ln -sf /usr/share/zoneinfo/$timezone /etc/localtime
     artix-chroot /mnt hwclock --systohc
 
 ########################################################
 ################################        GRUB
 
-        case $syst in
+        case $system in
         BIOS)
-        artix-chroot /mnt grub-install --recheck $diskbios
-        artix-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
+        artix-chroot '/mnt grub-install --recheck $biosdisk'
+        artix-chroot '/mnt grub-mkconfig -o /boot/grub/grub.cfg'
         ;;
         EFI)
-        artix-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=$bootid
-        artix-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
+        artix-chroot '/mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=$efiboot'
+        artix-chroot '/mnt grub-mkconfig -o /boot/grub/grub.cfg'
         ;;
         esac
 
