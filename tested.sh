@@ -635,7 +635,7 @@ answerending(){
 ################################        MAIN
 ################################
 
-until [ $ready == 0 && -z $locale && -z $timezone && -z $username && -z $hostname && -z $efiboot && -z $biosdisk && -z $network ]
+until [ $ready = 0 ]
 do
 answersystem
 answerlocale
