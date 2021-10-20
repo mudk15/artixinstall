@@ -532,35 +532,33 @@ read -p "       Your choice: " readyans
 
 answerpassroot(){
     clear
-    ready=no
+    correct=no
     answer="
        print root password
     "
-    while [ $ready != yes ]
+    until [ $correct = yes ]
         do
         clear
         printanswer
-        passwd
-        read -p "
-Do you enter pass correctly (yes/no)? : " ready
+        artix-chroot /mnt passwd
+        read -p "Do you enter pass correctly (yes/no)? : " correct
         done
 }
 
 answerpassuser(){
     clear
-    ready=no
+    correct=no
     answer="
        print root password
     "
     artix-chroot /mnt useradd -m -g users -G wheel -s /bin/bash $username
     echo "%wheel ALL=(ALL) ALL" >> /mnt/etc/sudoers
-    while [ $ready != yes ]
+    until [ $correct = yes ]
         do
         clear
         printanswer
         artix-chroot /mnt passwd $username
-        read -p "
-Do you enter pass correctly (yes/no)? : " ready
+        read -p "Do you enter pass correctly (yes/no)? : " correct
         done
 }
 
@@ -644,52 +642,54 @@ answerextrapackages
 answerready
 done
 
+if [ $ready = 1 ]
+then
 ############################################################        INSTALL
 ################################
 
 ############################################################        BASESTRAP-BASE-INIT
 ################################
 
-basestrap /mnt base base-devel $initsystem elogind-$initsystem
+    basestrap /mnt base base-devel $initsystem elogind-$initsystem
 
 ############################################################
 ################################        BASESTRAP-NETWORK
 
-basestrap /mnt $network $network"-"$initsystem dhcpcd
+    basestrap /mnt $network $network"-"$initsystem dhcpcd
 
 ############################################################
 ################################        BASESTRAP-KERNEL
 
-basestrap /mnt $kernel $kernel-headers linux-firmware
+    basestrap /mnt $kernel $kernel-headers linux-firmware
 
 ############################################################
 ################################        BASESTRAP-GRUB
 
-basestrap /mnt grub os-prober efibootmgr
+    basestrap /mnt grub os-prober efibootmgr
 
 ############################################################
 ################################        BASESTRAP-DESKTOP
 
-if [ -n $desktop ]
-then
-basestrap /mnt "$desktop"
-fi
+    if [ -n $desktop ]
+    then
+    basestrap /mnt "$desktop"
+    fi
 
 ########################################################
 ################################        BASESTRAP-DISPLAY
 
-if [ -n $display ]
-then
-basestrap /mnt $display $display"-"$initsystem
-fi
+    if [ -n $display ]
+    then
+    basestrap /mnt $display $display"-"$initsystem
+    fi
 
 ########################################################
 ################################        BASESTRAP-EXTRA
 
-if [ -n $extrapackages ]
-then
-basestrap /mnt "$extrapackages"
-fi
+    if [ -n $extrapackages ]
+    then
+    basestrap /mnt "$extrapackages"
+    fi
 
 ########################################################
 ################################        HOSTNAME
@@ -707,7 +707,7 @@ fi
 ########################################################
 ################################        HOSTS
 
-echo "127.0.1.1 localhost.localdomain $hostname" >> /mnt/etc/hosts
+    echo "127.0.1.1 localhost.localdomain $hostname" >> /mnt/etc/hosts
 
 ########################################################
 ################################        CONSOLEFONT
@@ -746,7 +746,7 @@ echo "127.0.1.1 localhost.localdomain $hostname" >> /mnt/etc/hosts
 ########################################################
 ################################        FSTAB
 
-fstabgen -U /mnt >> /mnt/etc/fstab
+    fstabgen -U /mnt >> /mnt/etc/fstab
 
 ########################################################
 ################################        TIMEZONE
@@ -814,10 +814,12 @@ fstabgen -U /mnt >> /mnt/etc/fstab
 ########################################################
 ################################        PASS
 
-answerpassroot
-answerpassuser
+    answerpassroot
+    answerpassuser
 
 ########################################################
 ################################        ENDING
 
-answerending
+    answerending
+
+fi
