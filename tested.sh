@@ -672,7 +672,7 @@ then
 
     if [ -n "$desktop" ]
     then
-    basestrap /mnt "$desktop"
+    basestrap /mnt $desktop
     fi
 
 ########################################################
@@ -688,7 +688,7 @@ then
 
     if [ -n "$extrapackages" ]
     then
-    basestrap /mnt "$extrapackages"
+    basestrap /mnt $extrapackages
     fi
 
 ########################################################
