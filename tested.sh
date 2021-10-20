@@ -670,7 +670,7 @@ then
 ############################################################
 ################################        BASESTRAP-DESKTOP
 
-    if [ -n $desktop ]
+    if [ -n "$desktop" ]
     then
     basestrap /mnt "$desktop"
     fi
@@ -678,7 +678,7 @@ then
 ########################################################
 ################################        BASESTRAP-DISPLAY
 
-    if [ -n $display ]
+    if [ -n "$display" ]
     then
     basestrap /mnt $display $display"-"$initsystem
     fi
@@ -686,7 +686,7 @@ then
 ########################################################
 ################################        BASESTRAP-EXTRA
 
-    if [ -n $extrapackages ]
+    if [ -n "$extrapackages" ]
     then
     basestrap /mnt "$extrapackages"
     fi
