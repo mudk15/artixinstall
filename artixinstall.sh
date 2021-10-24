@@ -1,7 +1,8 @@
 #!/bin/bash
 ################################
-################################        CHECK SYSTEM
+################################        CHECK_SYSTEM
 ################################
+check_system(){
 system=$(cat /sys/firmware/efi/fw_platform_size)
 if [ "$system" = 64 ]
 then
@@ -9,19 +10,29 @@ system=EFI
 else
 system=BIOS
 fi
+}
 ################################
-################################        CHOICEXIT
+################################        CHOICE_EXIT
 ################################
-choicexit(){
+choice_exit(){
 echo "
        exit without save
 "
 exit
 }
 ################################
-################################        PRINTGRAPH
+################################        TEST INIT DAEMONS
 ################################
-printgraph(){
+daemon_openrc(){
+pacman -Fl $programm-openrc | grep init.d | sed '$!d' | sed "s/$programm-openrc etc\/init.d\///"
+}
+daemon_runit(){
+pacman -Fl $programm-runit | grep run$ | sed "s/$programm-runit //" | sed "s/run$//"
+}
+################################
+################################        PRINT_GRAPH
+################################
+print_graph(){
 echo "
     ╔══════════════════════════════════════════════════════════════╗
 
@@ -52,7 +63,7 @@ echo "        network                 - $network
 ################################
 ################################        PRINTANSWER
 ################################
-printanswer(){
+print_answer(){
 echo '    ╔══════════════════════════════════════════════════════════════╗'
 echo "$answer"
 echo '    ╚══════════════════════════════════════════════════════════════╝
@@ -66,7 +77,7 @@ echo '    ╚══════════════════════�
 ################################
 ################################        SYSTEM FUNC
 ################################
-answersystem(){
+answer_system(){
 clear
 answer="
         script detected $system mode
@@ -77,8 +88,8 @@ answer="
             any) - exit without change
 
 "
-printgraph
-printanswer
+print_graph
+print_answer
 read -p "       Your choice: " systemans
     case $systemans in
     yes)
@@ -92,14 +103,14 @@ read -p "       Your choice: " systemans
     s)
     ;;
     *)
-    choicexit
+    choice_exit
     ;;
     esac
 }
 ################################
 ################################        LOCALE FUNC
 ################################
-answerlocale(){
+answer_locale(){
 clear
 answer="
         print locale (example ru_RU for Russian)
@@ -110,12 +121,12 @@ answer="
             empty) - exit without save
 
 "
-printgraph
-printanswer
+print_graph
+print_answer
 read -p "       Your choice: " localeans
     if [ -z "$localeans" ]
     then
-    choicexit
+    choice_exit
     fi
     case $localeans in
     s)
@@ -131,7 +142,7 @@ read -p "       Your choice: " localeans
 ################################
 ################################        FONT FUNC
 ################################
-answerfont(){
+answer_font(){
 clear
 answer='
         print console font (cyr-sun16 for russian)
@@ -142,12 +153,12 @@ answer='
             empty) - exit without save
 
 '
-printgraph
-printanswer
+print_graph
+print_answer
 read -p "       Your choice: " consolefontans
     if [ -z "$consolefontans" ]
     then
-    choicexit
+    choice_exit
     fi
     case $consolefontans in
     s)
@@ -163,7 +174,7 @@ read -p "       Your choice: " consolefontans
 ################################
 ################################        TIMEZONE FUNC
 ################################
-answertimezone(){
+answer_timezone(){
 clear
 answer='
         print timezone (example Europe/Moscow)
@@ -174,12 +185,12 @@ answer='
             empty) - exit without save
 
 '
-printgraph
-printanswer
+print_graph
+print_answer
 read -p "       Your choice: " timezoneans
     if [ -z "$timezoneans" ]
     then
-    choicexit
+    choice_exit
     fi
     case $timezoneans in
     s)
@@ -195,7 +206,7 @@ read -p "       Your choice: " timezoneans
 ################################
 ################################        USER FUNC
 ################################
-answeruser(){
+answer_user(){
 clear
 answer='
         print username
@@ -205,12 +216,12 @@ answer='
             empty) - exit without save
 
 '
-printgraph
-printanswer
+print_graph
+print_answer
 read -p "       Your choice: " usernameans
     if [ -z "$usernameans" ]
     then
-    choicexit
+    choice_exit
     fi
     case $usernameans in
     s)
@@ -223,7 +234,7 @@ read -p "       Your choice: " usernameans
 ################################
 ################################        HOST FUNC
 ################################
-answerhost(){
+answer_host(){
 clear
 answer="
         print hostname
@@ -233,12 +244,12 @@ answer="
             empty) - exit without save
 
 "
-printgraph
-printanswer
+print_graph
+print_answer
 read -p "       Your choice: " hostnameans
     if [ -z $hostnameans ]
     then
-    choicexit
+    choice_exit
     fi
     case $hostnameans in
     s)
@@ -251,7 +262,7 @@ read -p "       Your choice: " hostnameans
 ################################
 ################################        INIT FUNC
 ################################
-answerinitsystem(){
+answer_initsystem(){
 clear
 answer='
         choose init system
@@ -262,8 +273,8 @@ answer='
             (only runit and openrc for now)
 
 '
-printgraph
-printanswer
+print_graph
+print_answer
 read -p "       Your choice: " initsystemans
     case $initsystemans in
     1)
@@ -273,14 +284,14 @@ read -p "       Your choice: " initsystemans
     initsystem=openrc
     ;;
     *)
-    choicexit
+    choice_exit
     ;;
     esac
 }
 ################################
 ################################        KERNEL FUNC
 ################################
-answerkernel(){
+answer_kernel(){
 clear
 answer='
         choose kernel
@@ -291,8 +302,8 @@ answer='
             any) - exit without save
 
 '
-printgraph
-printanswer
+print_graph
+print_answer
 read -p "       Your choice: " kernelans
     case $kernelans in
     1)
@@ -305,14 +316,14 @@ read -p "       Your choice: " kernelans
     kernel=linux-lts
     ;;
     *)
-    choicexit
+    choice_exit
     ;;
     esac
 }
 ################################
 ################################        SYSTEM-EFI-BIOS FUNC
 ################################
-answersystemadd(){
+answer_system_add(){
     case $system in
     BIOS)
     clear
@@ -324,14 +335,14 @@ answersystemadd(){
             empty) - exit without save
 
     '
-    printgraph
-    printanswer
+    print_graph
+    print_answer
     lsblk
     echo " "
     read -p "       Your choice: " biosdiskans
         if [ -z "$biosdiskans" ]
         then
-        choicexit
+        choice_exit
         fi
         case $biosdiskans in
         s)
@@ -352,13 +363,13 @@ answersystemadd(){
             empty) - exit without save
 
     '
-    printgraph
-    printanswer
+    print_graph
+    print_answer
     read -p "       Your choice: " efibootans
     echo " "
         if [ -z "$efibootans" ]
         then
-        choicexit
+        choice_exit
         fi
         case $efibootans in
         s)
@@ -376,7 +387,7 @@ answersystemadd(){
 ################################
 ################################        NETWORK FUNC
 ################################
-answernetwork(){
+answer_network(){
 clear
 answer='
         print network manager
@@ -387,12 +398,12 @@ answer='
             empty) - exit with no changes
 
 '
-printgraph
-printanswer
+print_graph
+print_answer
 read -p "       Your choice: " networkans
     if [ -z "$networkans" ]
     then
-    choicexit
+    choice_exit
     fi
     case $networkans in
     s)
@@ -408,7 +419,7 @@ read -p "       Your choice: " networkans
 ################################
 ################################        DESKTOP FUNC
 ################################
-answerdesktop(){
+answer_desktop(){
 clear
 answer='
         print desktop environment
@@ -419,12 +430,12 @@ answer='
             empty) - exit with no changes
 
 '
-printgraph
-printanswer
+print_graph
+print_answer
 read -p "       Your choice: " desktopans
     if [ -z "$desktopans" ]
     then
-    choicexit
+    choice_exit
     fi
     case $desktopans in
     s)
@@ -440,7 +451,7 @@ read -p "       Your choice: " desktopans
 ################################
 ################################        DISPLAY FUNC
 ################################
-answerdisplay(){
+answer_display(){
 clear
 answer='
         print display manager
@@ -451,12 +462,12 @@ answer='
             empty) - exit with no changes
 
 '
-printgraph
-printanswer
+print_graph
+print_answer
 read -p "       Your choice: " displayans
     if [ -z "$displayans" ]
     then
-    choicexit
+    choice_exit
     fi
     case $displayans in
     s)
@@ -472,7 +483,7 @@ read -p "       Your choice: " displayans
 ################################
 ################################        FUNC-EXTRAPACKAGES
 ################################
-answerextrapackages(){
+answer_extra_packages(){
 clear
 answer='
        print additional packages
@@ -482,12 +493,12 @@ answer='
             empty) - exit with no changes
 
 '
-printgraph
-printanswer
+print_graph
+print_answer
 read -p "       Your choice: " extrapackagesans
     if [ -z $extrapackagesans ]
     then
-    choicexit
+    choice_exit
     fi
     case $extrapackagesans in
     s)
@@ -503,7 +514,7 @@ read -p "       Your choice: " extrapackagesans
 ################################
 ################################
 ################################
-answerready(){
+answer_ready(){
 clear
 answer='
        Are you sure?
@@ -513,12 +524,12 @@ answer='
          empty) - exit with no changes
 
 '
-printgraph
-printanswer
+print_graph
+print_answer
 read -p "       Your choice: " readyans
     if [ -z $readyans ]
     then
-    choicexit
+    choice_exit
     fi
     if [ $readyans = yes ]
     then
@@ -530,7 +541,7 @@ read -p "       Your choice: " readyans
 ################################        PASSWORD FUNC
 ################################
 
-answerpassroot(){
+answer_pass_root(){
     clear
     correct=no
     answer="
@@ -539,13 +550,13 @@ answerpassroot(){
     until [ $correct = yes ]
         do
         clear
-        printanswer
+        print_answer
         artix-chroot /mnt passwd
         read -p "Do you enter pass correctly (yes/no)? : " correct
         done
 }
 
-answerpassuser(){
+answer_password_user(){
     clear
     correct=no
     answer="
@@ -556,7 +567,7 @@ answerpassuser(){
     until [ $correct = yes ]
         do
         clear
-        printanswer
+        print_answer
         artix-chroot /mnt passwd $username
         read -p "Do you enter pass correctly (yes/no)? : " correct
         done
@@ -566,7 +577,7 @@ answerpassuser(){
 ################################        ENDING FUNC
 ################################
 
-answerending(){
+answer_ending(){
     clear
     answer='
        Do you want reboot or...
@@ -575,7 +586,7 @@ answerending(){
          2)Enter artix-chroot (reboot after exit)
          any) - reboot
     '
-    printanswer
+    print_answer
     read -p "       Your choice: " endingans
     case $endingans in
         1)
@@ -599,47 +610,48 @@ answerending(){
 ################################
 ################################        LIST OF FUNCTIONS
 ################################
-# answersystem
-# answerlocale
-# answerfont
-# answertimezone
-# answeruser
-# answerhost
-# answerinitsystem
-# answerkernel
-# answersystemadd
-# answernetwork
-# answerdesktop
-# answerdisplay
-# answerextrapackages
-# answerready
+# answer_system
+# answer_locale
+# answer_font
+# answer_timezone
+# answer_user
+# answer_host
+# answer_initsystem
+# answer_kernel
+# answer_system_add
+# answer_network
+# answer_desktop
+# answer_display
+# answer_extra_packages
+# answer_ready
 
 #       AFTER READY
 
-# answerpassroot
-# answerpassuser
-# answerending
+# answer_pass_root
+# answer_password_user
+# answer_ending
 
 ################################
 ################################        MAIN
 ################################
 ready=0
+check_system
 while [ $ready = 0 ]
 do
-answersystem
-answerlocale
-answerfont
-answertimezone
-answeruser
-answerhost
-answerinitsystem
-answerkernel
-answersystemadd
-answernetwork
-answerdesktop
-answerdisplay
-answerextrapackages
-answerready
+answer_system
+answer_locale
+answer_font
+answer_timezone
+answer_user
+answer_host
+answer_initsystem
+answer_kernel
+answer_system_add
+answer_network
+answer_desktop
+answer_display
+answer_extra_packages
+answer_ready
 done
 
 if [ $ready = 1 ]
@@ -774,26 +786,13 @@ then
 ########################################################
 ################################        AUTOSTART-NETWORK
 
+    programm=$network
     case $initsystem in
         runit)
-        case $network in
-            networkmanager)
-            artix-chroot /mnt ln -s /etc/runit/sv/NetworkManager /etc/runit/runsvdir/default
-            ;;
-            connman)
-            artix-chroot /mnt ln -s /etc/runit/sv/connmand/ /etc/runit/runsvdir/default
-            ;;
-        esac
+            artix-chroot /mnt ln -s `daemon_runit` /etc/runit/runsvdir/default
         ;;
         openrc)
-        case $network in
-            networkmanager)
-            artix-chroot /mnt rc-update add NetworkManager
-            ;;
-            connman)
-            artix-chroot /mnt rc-update add connmand
-            ;;
-        esac
+            artix-chroot /mnt rc-update add `daemon_openrc`
         ;;
     esac
 
@@ -802,12 +801,13 @@ then
 
     if [ -n $display ]
     then
+    programm=$display
         case $initsystem in
         runit)
-        artix-chroot /mnt ln -s /etc/runit/sv/$display /etc/runit/runsvdir/default
+            artix-chroot /mnt ln -s `daemon_runit` /etc/runit/runsvdir/default
         ;;
         openrc)
-        artix-chroot /mnt rc-update add $display
+            artix-chroot /mnt rc-update add `daemon_openrc`
         ;;
         esac
     fi
@@ -815,12 +815,12 @@ then
 ########################################################
 ################################        PASS
 
-    answerpassroot
-    answerpassuser
+    answer_pass_root
+    answer_password_user
 
 ########################################################
 ################################        ENDING
 
-    answerending
+    answer_ending
 
 fi
