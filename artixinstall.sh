@@ -23,10 +23,10 @@ exit
 ################################
 ################################        TEST INIT DAEMONS
 ################################
-daemon_openrc(){
+daemon_openrc_func(){
 pacman -Fl $programm-openrc | grep init.d | sed '$!d' | sed "s/$programm-openrc etc\/init.d\///"
 }
-daemon_runit(){
+daemon_runit_func(){
 pacman -Fl $programm-runit | grep run$ | sed "s/$programm-runit //" | sed "s/run$//"
 }
 ################################
@@ -787,12 +787,14 @@ then
 ################################        AUTOSTART-NETWORK
 
     programm=$network
+    daemon_runit=$(daemon_runit_func)
+    daemon_openrc=$(daemon_openrc_func)
     case $initsystem in
         runit)
-            artix-chroot /mnt ln -s `daemon_runit` /etc/runit/runsvdir/default
+            artix-chroot /mnt ln -s $daemon_runit /etc/runit/runsvdir/default
         ;;
         openrc)
-            artix-chroot /mnt rc-update add `daemon_openrc`
+            artix-chroot /mnt rc-update add $daemon_openrc
         ;;
     esac
 
@@ -802,12 +804,14 @@ then
     if [ -n $display ]
     then
     programm=$display
+    daemon_runit=$(daemon_runit_func)
+    daemon_openrc=$(daemon_openrc_func)
         case $initsystem in
         runit)
-            artix-chroot /mnt ln -s `daemon_runit` /etc/runit/runsvdir/default
+            artix-chroot /mnt ln -s $daemon_runit /etc/runit/runsvdir/default
         ;;
         openrc)
-            artix-chroot /mnt rc-update add `daemon_openrc`
+            artix-chroot /mnt rc-update add $daemon_openrc
         ;;
         esac
     fi
