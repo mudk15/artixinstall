@@ -560,7 +560,7 @@ answer_password_user(){
     clear
     correct=no
     answer="
-       print root password
+       print $username password
     "
     artix-chroot /mnt useradd -m -g users -G wheel -s /bin/bash $username
     echo "%wheel ALL=(ALL) ALL" >> /mnt/etc/sudoers
