@@ -24,10 +24,10 @@ exit
 ################################        TEST INIT DAEMONS
 ################################
 daemon_openrc_func(){
-pacman -Fl $programm-openrc | grep init.d | sed '$!d' | sed "s/$programm-openrc etc\/init.d\///"
+pacman -Ql $programm-openrc | grep init.d | sed '$!d' | sed "s/$programm-openrc etc\/init.d\///"
 }
 daemon_runit_func(){
-pacman -Fl $programm-runit | grep run$ | sed "s/$programm-runit //" | sed "s/run$//"
+pacman -Ql $programm-runit | grep run$ | sed "s/$programm-runit //" | sed "s/run$//"
 }
 ################################
 ################################        PRINT_GRAPH
