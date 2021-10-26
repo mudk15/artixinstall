@@ -863,21 +863,21 @@ if [ $ready_cycle = 1 ]; then
 
     if [ ! -z "$desktop" ]
     then
-    basestrap /mnt $desktop
+    basestrap -i /mnt $desktop
     fi
 
 #####################       BASESTRAP-DISPLAY
 
     if [ ! -z "$display" ]
     then
-    basestrap /mnt $display $display"-"$initsystem
+    basestrap -i /mnt $display $display"-"$initsystem
     fi
 
 #####################       BASESTRAP-EXTRA
 
     if [ ! -z "$extra_packages" ]
     then
-    basestrap /mnt $extra_packages
+    basestrap -i /mnt $extra_packages
     fi
 
 #####################       HOSTNAME
