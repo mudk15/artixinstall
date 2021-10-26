@@ -695,7 +695,7 @@ correct=no
 answer_password_user(){
 correct=no
 artix-chroot /mnt useradd -m -g users -G wheel -s /bin/bash $username
-echo "%wheel ALL=(ALL) ALL" >> /mnt/etc/sudoers
+sed -i '82s/# //' /mnt/etc/sudoers
     until [ $correct = yes ]
     do
         print_full
@@ -808,14 +808,25 @@ done
 mounting_where=
 ready_cycle=
 answer_cycle="\tAre you sure?\n"
-while [[ -z $ready_cycle || -z $locale || -z $timezone || -z $username || -z $hostname || -z $initsystem || -z $kernel || -z $network || -z $system_add_var ]]
+while [[ -z $ready_cycle && -z $locale && -z $timezone && -z $username && -z $hostname && -z $initsystem && -z $kernel && -z $network && -z $system_add_var ]]
 do
 answer_system_add
-    if [[ ! -z $efi_boot || ! -z $bios_disk ]]; then
-    system_add_var=1
-    else
-    system_add_var=
-    fi
+    case $system_mode in
+    EFI)
+        if [ ! -z $efi_boot ]; then
+        system_add_var=1
+        else
+        system_add_var=
+        fi
+    ;;
+    BIOS)
+         if [ ! -z $bios_disk ]; then
+        system_add_var=1
+        else
+        system_add_var=
+        fi
+    ;;
+    esac
 answer_locale
 answer_console_font
 answer_timezone
@@ -908,12 +919,12 @@ if [ $ready_cycle = 1 ]; then
 
 #####################       LOCALE-GEN
 
-        if [ $locale == en_US ]
+        if [ $locale = en_US ]
         then
-        echo $locale.UTF-8 UTF-8 >> /mnt/etc/locale.gen
+        sed -i "s/#$locale.UTF-8/$locale.UTF-8/" /mnt/etc/locale.gen
         else
-        echo $locale.UTF-8 UTF-8 >> /mnt/etc/locale.gen
-        echo en_US.UTF-8 UTF-8 >> /mnt/etc/locale.gen
+        sed -i "s/#$locale.UTF-8/$locale.UTF-8/" /mnt/etc/locale.gen
+        sed -i "s/#en_US.UTF-8/en_US.UTF-8/" /mnt/etc/locale.gen
         fi
         artix-chroot /mnt locale-gen
 
