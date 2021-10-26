@@ -1,5 +1,4 @@
 # artixinstall
-____
 1. Enter livecd
 2. Enter root (su)
 3. pacman -Sy git
