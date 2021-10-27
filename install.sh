@@ -35,40 +35,40 @@ print_lower(){
 echo -e "    └───────────────────────────────────────────────────────────────────┘"
 }
 print_graph(){
-echo -e "\tyour choice\n
-\tbios mode               - $system_mode"
+echo -e "\t Your choice\n
+\t Bios mode               - $system_mode"
 if [ ! -z $partition_tool ]; then
-echo -e "\tmount tool              - $partition_tool
-\tdisk to partitioning    - $partition_disk"
+echo -e "\t Mount tool              - $partition_tool
+\t Disk to partitioning    - $selected_disk"
 fi
 if [ ! -z $filesystem_fs ]; then
-echo -e "\tfilesystem              - "$filesystem_fs"
-\tdisk to format          - $filesystem_disk"
+echo -e "\t Filesystem              - "$filesystem_fs"
+\t Disk to format          - $selected_disk"
 fi
 if [ ! -z $mounting_where ]; then
-echo -e "\tWhere to mount?         - $mounting_where
-\tWhat to mount?          - $mounting_what"
+echo -e "\t Where to mount?         - $mounting_where
+\t What to mount?          - $selected_disk"
 fi
 if [ -z $stady_system_mount ]; then
 lsblk -o NAME,SIZE,FSTYPE,FSVER,MOUNTPOINTS | sed '1d' | sed 's/^/\t/' | sed '1s/^/\n/' | sed '$s/$/\n/'
 fi
 if [ "$system_mode" = EFI ]
 then
-echo -e "\t(EFI) bootloader name*  - $efi_boot"
+echo -e "\t*(EFI) bootloader name  - $efi_boot"
 else
-echo -e "\t(BIOS) disk for grub*   - $bios_disk"
+echo -e "\t*(BIOS) disk for grub   - $bios_disk"
 fi
-echo -e "\tlocale*                 - $locale
-\tconsole font            - $console_font
-\ttimezone*               - $timezone
-\tuser*                   - $username
-\thostname*               - $hostname
-\tinit system*            - $initsystem
-\tkernel*                 - $kernel
-\tnetwork*                - $network
-\tdesktop environment     - $desktop
-\tdisplay manager         - $display
-\tadditional packages     - $extra_packages
+echo -e "\t*Locale                 - $locale
+\t Console font           - $console_font
+\t*Timezone               - $timezone
+\t*User                   - $username
+\t*Hostname               - $hostname
+\t*Init system            - $initsystem
+\t*Kernel                 - $kernel
+\t*Network                - $network
+\t Desktop environment    - $desktop
+\t Display manager        - $display
+\t Additional packages    - $extra_packages
 \t* - Required field"
 }
 
@@ -94,7 +94,7 @@ fi
 answer_ready(){
 print_full
 print_upper
-echo -e "\tAre you sure?\n
+echo -e "\tAre you sure?(Changes will be applied)\n
 \tyes) - continue
 \tno) - restart
 \tany) - exit without change"
@@ -121,7 +121,7 @@ fi
 answer_ready_cycle(){
 print_full
 print_upper
-echo -e "$answer_cycle"
+echo -e "\tHave you finished $cycle_action?\n"
 echo -e "\tyes) - continue
 \tno) - restart
 \tany) - exit without change"
@@ -227,10 +227,10 @@ answer_partition_tool(){
 print_full
 print_upper
 print_scheme
-echo -e "\tPrint partition tool"
-ls /usr/bin/ | grep disk$ | sed 's/^/\t/' | sed 's/cfdisk/cfdisk (recommended)/'
-ls /usr/bin/ | grep parted$ | sed 's/^/\t/'
-echo -e "\ts) - skip
+echo -e "\tPrint partition tool (cfdisk recommended)\n"
+ls /usr/bin/ | grep disk$ | sed ":a; N; s/\n/\t/" | sed 's/^/\t/'
+ls /usr/bin/ | grep parted$ | sed ":a; N; s/\n/\t/" | sed 's/^/\t/'
+echo -e "\n\ts) - skip
 \tc) - clear
 \tempty) - exit without save"
 print_lower
@@ -252,11 +252,11 @@ else
 fi
 }
 
-answer_partition_disk(){
+answer_selected_disk(){
 print_full
 print_upper
 print_scheme
-echo -e "\tPrint disk to partitioning ( sd* )
+echo -e "\tPrint disk to $cycle_action ( sd* )
 \ts) - skip
 \tc) - clear
 \tempty) - exit without save"
@@ -270,10 +270,10 @@ else
     s)
     ;;
     c)
-    partition_disk=
+    selected_disk=
     ;;
     *)
-    partition_disk="/dev/$answer"
+    selected_disk="/dev/$answer"
     ;;
     esac
 fi
@@ -283,9 +283,9 @@ answer_filesystem_fs(){
 print_full
 print_upper
 print_scheme
-echo -e "\tPrint filesystem to format + options"
-ls /usr/bin/ | grep mkfs | sed '1d' | sed '/dos/d' | sed '/s.fat/d' | sed 's/mkfs.//' | sed 's/^/\t/'
-echo -e "\ts) - skip
+echo -e "\tPrint filesystem to format + options\n"
+ls /usr/bin/ | grep ^mkfs | sed -e "1d; /msdos/d; /s.fat/d; s/mkfs.//" | sed ":a; N; s/\n/\t/" | sed "s/^/\t/"
+echo -e "\n\ts) - skip
 \tc) - clear
 \tempty) - exit without save"
 print_lower
@@ -307,42 +307,15 @@ else
 fi
 }
 
-answer_filesystem_disk(){
-print_full
-print_upper
-print_scheme
-echo -e "\tPrint partition to format ( sd(a-z)* )
-\ts) - skip
-\tc) - clear
-\tempty) - exit without save"
-print_lower
-read -p "
-        Your choice: " answer
-if [ -z $answer ]; then
-choice_exit
-else
-    case $answer in
-    s)
-    ;;
-    c)
-    filesystem_disk=
-    ;;
-    *)
-    filesystem_disk="/dev/$answer"
-    ;;
-    esac
-fi
-}
-
 answer_mounting_where(){
 print_full
 print_upper
 print_scheme
-echo -e "\tPrint where to mount disk
+echo -e "\tPrint where to mount disk\n
 \tFor example
 \t/) - root
 \t/boot/efi) - efi (for EFI)
-\t/home - home directory
+\t/home - home directory\n
 \ts) - skip
 \tc) - clear
 \tempty) - exit without save"
@@ -360,33 +333,6 @@ else
     ;;
     *)
     mounting_where="/mnt$answer"
-    ;;
-    esac
-fi
-}
-
-answer_mounting_what(){
-print_full
-print_upper
-print_scheme
-echo -e "\tPrint partition to mount ( sd(a-z)* )
-\ts) - skip
-\tc) - clear
-\tempty) - exit without save"
-print_lower
-read -p "
-        Your choice: " answer
-if [ -z $answer ]; then
-choice_exit
-else
-    case $answer in
-    s)
-    ;;
-    c)
-    mounting_what=
-    ;;
-    *)
-    mounting_what="/dev/$answer"
     ;;
     esac
 fi
@@ -737,6 +683,10 @@ esac
 }
 
 #####################
+if [ "$EUID" -ne 0 ]; then
+echo -e "\n\tPlease run as root\n"
+exit
+fi
 check_system
 #####################       CYCLE_SYSTEM_MODE
     ready=
@@ -747,39 +697,39 @@ check_system
     done
 #####################       CYCLE_PARTITIONING
 ready_cycle=
-answer_cycle="\tHave you finished partitioning?\n"
+cycle_action="partitioning"
 while [ -z $ready_cycle ]
 do
 ready=
     while [ -z $ready ]
     do
+    answer_selected_disk
     answer_partition_tool
-    answer_partition_disk
     answer_ready
     done
-if [[ ! -z $partition_tool && ! -z $partition_disk ]]; then
-$partition_tool $partition_disk
+if [[ ! -z $partition_tool && ! -z $selected_disk ]]; then
+$partition_tool $selected_disk
 fi
 answer_ready_cycle
 done
 #####################   `   CYCLE_FORMAT
 partition_tool=
 ready_cycle=
-answer_cycle="\tHave you finished formatting?\n"
+cycle_action="formatting"
 while [ -z $ready_cycle ]
 do
 ready=
     while [ -z $ready ]
     do
+    answer_selected_disk
     answer_filesystem_fs
-    answer_filesystem_disk
     answer_ready
     done
-if [[ ! -z $filesystem_fs && ! -z $filesystem_disk ]]; then
+if [[ ! -z $filesystem_fs && ! -z $selected_disk ]]; then
     if [ -z $filesystem_option ]; then
-    mkfs.$filesystem_fs $filesystem_disk
+    mkfs.$filesystem_fs $selected_disk
     else
-    mkfs.$filesystem_fs $filesystem_option $filesystem_disk
+    mkfs.$filesystem_fs $filesystem_option $selected_disk
     fi
 fi
 answer_ready_cycle
@@ -787,20 +737,20 @@ done
 #####################       CYCLE_MOUNT
 filesystem_fs=
 ready_cycle=
-answer_cycle="\tHave you finished mounting?\n"
+cycle_action="mounting"
 while [ -z $ready_cycle ]
 do
 ready=
     while [ -z $ready ]
     do
+    answer_selected_disk
     answer_mounting_where
-    answer_mounting_what
     answer_ready
     done
-if [[ ! -z $mounting_what && ! -z $mounting_where ]]; then
-umount $mounting_what
+if [[ ! -z $selected_disk && ! -z $mounting_where ]]; then
+umount $selected_disk
 mkdir -p $mounting_where
-mount $mounting_what $mounting_where
+mount $selected_disk $mounting_where
 fi
 answer_ready_cycle
 done
@@ -941,7 +891,7 @@ if [ $ready_cycle = 1 ]; then
 
         case $system_mode in
         BIOS)
-        artix-chroot /mnt grub-install --recheck $bios_disk
+        artix-chroot /mnt grub-install --recheck /dev/$bios_disk
         artix-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
         ;;
         EFI)
