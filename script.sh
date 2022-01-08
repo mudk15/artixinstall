@@ -22,13 +22,13 @@ echo -e "\n\tYou select $dhcpclient\n";break;done
 
 if [[ -z $userlogin ]];then
 echo -e "\tPrint user login"
-until [[ $userlogin =~ ^([a-z]+)$ ]];do
+until [[ $userlogin =~ ^([:lower:]+)$ ]];do
 read -rp "  Print username: " userlogin;done
 fi
 
 if [[ -z $hostname ]];then
 echo -e "\n\tPrint hostname"
-until [[ $hostname =~ ^([a-zA-Z0-9]+)([a-zA-Z0-9|\-|\.]+)([a-zA-Z0-9]+)$ ]];do
+until [[ $hostname =~ ^([:alnum:]+)([:alnum:]+)$ ]];do
 read -rp "  Print hostname: " hostname;done
 fi
 
