@@ -73,8 +73,18 @@ sed -i "/UTF-8/s/^#$locale/$locale/" /mnt/etc/locale.gen
 artix-chroot /mnt locale-gen
 
 case $init in
-runit)echo -e "$hostname" > /mnt/etc/hostname;;
-openrc)echo -e "$hostname" > /mnt/etc/hostname;echo -e "hostname=$hostname" > /mnt/etc/conf.d/hostname;;
+runit)
+	case $netmgr in
+	connman) ln -s /mnt/etc/runit/sv/connmand /mnt/etc/runit/runsvdir/default;;
+	networkmanager) ln -s /mnt/etc/runit/sv/NetworkManager /mnt/etc/runit/runsvdir/default;;
+	esac
+echo -e "$hostname" > /mnt/etc/hostname;;
+openrc)
+	case $netmgr in
+	connman) rc-update add connmand;;
+	networkmanager) rc-update add NetworkManager;;
+	esac
+echo -e "$hostname" > /mnt/etc/hostname;echo -e "hostname=$hostname" > /mnt/etc/conf.d/hostname;;
 esac
 
 echo -e "127.0.1.1 localhost.localdomain $hostname" >> /mnt/etc/hosts
