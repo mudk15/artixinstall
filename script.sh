@@ -28,7 +28,7 @@ fi
 
 if [[ -z $hostname ]];then
 echo -e "\n\tPrint hostname"
-until [[ $hostname =~ ^([a-zA-Z0-9]+)([a-zA-Z0-9\-\.])([a-zA-Z0-9]+)$ ]];do
+until [[ $hostname =~ ^([a-zA-Z0-9]+)$ ]];do
 read -rp "  Print hostname: " hostname;done
 fi
 
