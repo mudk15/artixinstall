@@ -45,8 +45,8 @@ fi
 
 if [[ -z $locale ]];then
 echo -e "\tPrint locale"
-until [[ $userlogin =~ ^([a-z]+_)([A-Z]+)$ ]];do
-read -rp "  Print username: " userlogin;done
+until [[ $locale =~ ^([a-z]+_)([A-Z]+)$ ]];do
+read -rp "  Print username: " locale;done
 fi
 
 echo -e "
