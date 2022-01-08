@@ -1,5 +1,5 @@
 #!/bin/bash
-set -o posix
+shopt -s extglob
 PS3="  Print number: "
 echo -e "\n\tSelect init"
 select init in runit openrc;do 
