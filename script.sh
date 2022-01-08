@@ -17,13 +17,13 @@ select dhcpclient in dhcpcd dhclient;do echo -e "\tYou select $dhcpclient";break
 
 if [[ -z $userlogin ]];then
 echo -e "\tUsername is empty"
-while [[ $userlogin != ([a-z]*) ]];do
+until [[ $userlogin =~ [a-z]+ ]];do
 read -rp "  Print username: " userlogin
 done
 fi
 
 if [[ ]];then
-while [[ $hostname != ([a-zA-Z0-9\-\.]*) ]];do
+until [[ $hostname =~ [a-zA-Z0-9\-\.]+ ]];do
 read -rp "  Print hostname: " hostname
 done
 fi
@@ -38,4 +38,4 @@ echo -e "
 \tHostname\t - $hostname
 "
 
-# basestrap /mnt/ base base-devel $init elogind-$init $kernel $ucode linux-firmware $texted sudo grub os-prober efibootmgr $dhcpclient
+#basestrap /mnt/ base base-devel $init elogind-$init $kernel $ucode linux-firmware $texted sudo grub os-prober efibootmgr $dhcpclient
