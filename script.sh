@@ -66,51 +66,28 @@ basestrap /mnt/ base base-devel $init "elogind-$init" $kernel $ucode linux-firmw
 
 fstabgen -U /mnt >> /mnt/etc/fstab
 
-artix-chroot /mnt ln -sf /usr/share/zoneinfo/$timezone /etc/localtime
+ln -sf /mnt/usr/share/zoneinfo/$timezone /mnt/etc/localtime
 artix-chroot /mnt hwclock --systohc
 
-artix-chroot /mnt sed -i "/UTF-8/s/^#$locale/$locale/" /etc/locale.gen
+sed -i "/UTF-8/s/^#$locale/$locale/" /mnt/etc/locale.gen
 artix-chroot /mnt locale-gen
 
 case $init in
-runit)artix-chroot /mnt echo -e "$hostname" > /etc/hostname;;
-openrc)artix-chroot /mnt echo -e "$hostname" > /etc/hostname;artix-chroot /mnt echo "hostname=$hostname" > /mnt/etc/conf.d/hostname;;
+runit)echo -e "$hostname" > /mnt/etc/hostname;;
+openrc)echo -e "$hostname" > /mnt/etc/hostname;echo -e "hostname=$hostname" > /mnt/etc/conf.d/hostname;;
 esac
 
-artix-chroot /mnt echo "127.0.1.1 localhost.localdomain $hostname" >> /etc/hosts
+echo -e "127.0.1.1 localhost.localdomain $hostname" >> /mnt/etc/hosts
 
-artix-chroot /mnt echo -e "LANG=\"$locale.UTF-8\"\nLC_COLLATE=\"C\"" > /etc/locale.conf
+echo -e "LANG=\"$locale.UTF-8\"\nLC_COLLATE=\"C\"" > /mnt/etc/locale.conf
 
 artix-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=Artix
 artix-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 
 artix-chroot /mnt useradd -m -g users -G wheel -s /bin/bash $userlogin
 
-answer=no
-while [[ $answer == no ]];do
-echo -e "\n\tPrint root pass"
 artix-chroot /mnt passwd
-PS3="Do you enter root pass correctly? :"
-select answer in yes no;do
-case $answer in
-yes)answer=yes;;
-no)answer=no;;
-esac
-break;done
-done
-
-answer=no
-while [[ $answer == no ]];do
-echo -e "\n\tPrint $userlogin pass"
-artix-chroot /mnt passwd $userlogin
-PS3="Do you enter $userlogin pass correctly? :"
-select answer in yes no;do
-case $answer in
-yes)answer=yes;;
-no)answer=no;;
-esac
-break;done
-done
+artix-chrot /mnt passwd $userlogin
 
 umount -R /mnt
 exit
