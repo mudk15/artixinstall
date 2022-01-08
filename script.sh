@@ -24,7 +24,7 @@ fi
 
 if [[ -z $hostname ]];then
 echo -e "\n\tPrint hostname"
-until [[ $hostname =~ [a-zA-Z0-9\-\.]+ ]];do
+until [[ $hostname =~ [a-zA-Z0-9_\-\.]+ ]];do
 read -rp "  Print hostname: " hostname
 done
 fi
