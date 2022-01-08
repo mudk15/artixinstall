@@ -92,7 +92,10 @@ echo -e "\n\tPrint root pass"
 artix-chroot /mnt passwd
 PS3="Do you enter root pass correctly? :"
 select answer in yes no;do
-case $answer in;yes)answer=yes;;no)answer=no;;esac
+case $answer in
+yes)answer=yes;;
+no)answer=no;;
+esac
 break;done
 done
 
@@ -102,7 +105,10 @@ echo -e "\n\tPrint $userlogin pass"
 artix-chroot /mnt passwd $userlogin
 PS3="Do you enter $userlogin pass correctly? :"
 select answer in yes no;do
-case $answer in;yes)answer=yes;;no)answer=no;;esac
+case $answer in
+yes)answer=yes;;
+no)answer=no;;
+esac
 break;done
 done
 
