@@ -22,7 +22,7 @@ read -rp "  Print username: " userlogin
 done
 fi
 
-if [[ ]];then
+if [[ -z $hostname ]];then
 until [[ $hostname =~ [a-zA-Z0-9\-\.]+ ]];do
 read -rp "  Print hostname: " hostname
 done
