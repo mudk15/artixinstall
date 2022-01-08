@@ -1,5 +1,5 @@
 #!/bin/bash
-shopt -s extglob
+
 PS3="  Print number: "
 echo -e "\n\tSelect init"
 select init in runit openrc;do 
@@ -31,6 +31,12 @@ if [[ -z $hostname ]];then
 echo -e "\n\tPrint hostname"
 until [[ $hostname =~ ^([a-zA-Z0-9]+)$ ]];do
 read -rp "  Print hostname: " hostname;done
+fi
+
+if [[ -z $timezone ]];then
+echo -e "\n\tPrint timezone"
+until [[ $timezone =~ ^([A-Z]{1})([a-z]+/)([A-Z]{1})([a-z]+)$ ]];do
+read -rp "  Print timezone: " timezone;done
 fi
 
 echo -e "
