@@ -1,19 +1,19 @@
 #!/bin/bash
 PS3="  Print number: "
-echo -e "\tSelect init"
-select init in runit openrc;do echo -e "\tYou select $init";break;done
+echo -e "\n\tSelect init\n"
+select init in runit openrc;do echo -e "\n\tYou select $init\n";break;done
 
-echo -e "\tSelect kernel"
-select kernel in linux linux-zen linux-lts linux-hardened;do echo -e "\tYou select $kernel";break;done
+echo -e "\n\tSelect kernel\n"
+select kernel in linux linux-zen linux-lts linux-hardened;do echo -e "\n\tYou select $kernel\n";break;done
 
-echo -e "\tSelect ucode"
-select ucode in "amd-ucode" "intel-ucode";do echo -e "\tYou select $ucode";break;done
+echo -e "\n\tSelect ucode\n"
+select ucode in "amd-ucode" "intel-ucode";do echo -e "\n\tYou select $ucode\n";break;done
 
-echo -e "\tSelect editor"
-select texted in nano vim;do echo -e "\tYou select $texted";break;done
+echo -e "\n\tSelect editor\n"
+select texted in nano vim;do echo -e "\n\tYou select $texted\n";break;done
 
-echo -e "\tSelect dhcp client"
-select dhcpclient in dhcpcd dhclient;do echo -e "\tYou select $dhcpclient";break;done
+echo -e "\n\tSelect dhcp client\n"
+select dhcpclient in dhcpcd dhclient;do echo -e "\n\tYou select $dhcpclient\n";break;done
 
 if [[ -z $userlogin ]];then
 echo -e "\tUsername is empty"
