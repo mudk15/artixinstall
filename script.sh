@@ -14,7 +14,7 @@ select ucode in "amd-ucode" "intel-ucode";do
 echo -e "\n\tYou select $ucode\n";break;done
 
 echo -e "\n\tSelect editor"
-select texted in nano vim;do 
+select texted in nano vim neovim;do 
 echo -e "\n\tYou select $texted\n";break;done
 
 echo -e "\n\tSelect dhcp client"
@@ -33,7 +33,7 @@ fi
 
 if [[ -z $hostname ]];then
 echo -e "\n\tPrint hostname"
-until [[ $hostname =~ ^([a-zA-Z0-9]+)$ ]];do
+until [[ $hostname =~ ^([[:alnum:]]+)([A-Za-z0-9\-]+)([[:alnum:]]+)$ ]];do
 read -rp "  Print hostname: " hostname;done
 fi
 
@@ -62,43 +62,51 @@ echo -e "
 \tlocale\t\t - $locale
 "
 
-basestrap /mnt/ base base-devel $init "elogind-$init" $kernel $ucode linux-firmware $texted sudo grub os-prober efibootmgr $dhcpclient "$netmgr-$init"
+echo -e "\n\tAre you sure?"
+select answer in 'yes' 'exit'
+do 
+if [[ $answer == 'yes' ]];then
+	basestrap /mnt/ base base-devel $init "elogind-$init" $kernel $ucode linux-firmware $texted sudo grub os-prober efibootmgr $dhcpclient "$netmgr-$init"
 
-fstabgen -U /mnt >> /mnt/etc/fstab
+	fstabgen -U /mnt >> /mnt/etc/fstab
 
-ln -sf /mnt/usr/share/zoneinfo/$timezone /mnt/etc/localtime
-artix-chroot /mnt hwclock --systohc
+	artix-chroot /mnt ln -sf /usr/share/zoneinfo/$timezone /etc/localtime
+	artix-chroot /mnt hwclock --systohc
 
-sed -i "/UTF-8/s/^#$locale/$locale/" /mnt/etc/locale.gen
-artix-chroot /mnt locale-gen
+	sed -i "/UTF-8/s/^#$locale/$locale/" /mnt/etc/locale.gen
+	artix-chroot /mnt locale-gen
 
-case $init in
-runit)
-	case $netmgr in
-	connman) ln -s /mnt/etc/runit/sv/connmand /mnt/etc/runit/runsvdir/default;;
-	networkmanager) ln -s /mnt/etc/runit/sv/NetworkManager /mnt/etc/runit/runsvdir/default;;
+	case $init in
+		runit)	
+			case $netmgr in
+			connman) ln -s /mnt/etc/runit/sv/connmand /mnt/etc/runit/runsvdir/default;;
+			networkmanager) ln -s /mnt/etc/runit/sv/NetworkManager /mnt/etc/runit/runsvdir/default;;
+			esac
+			echo -e "$hostname" > /mnt/etc/hostname;;
+		openrc)
+			case $netmgr in
+			connman) rc-update add connmand;;
+			networkmanager) rc-update add NetworkManager;;
+			esac
+			echo -e "$hostname" > /mnt/etc/hostname;echo -e "hostname=$hostname" > /mnt/etc/conf.d/hostname;;
 	esac
-echo -e "$hostname" > /mnt/etc/hostname;;
-openrc)
-	case $netmgr in
-	connman) rc-update add connmand;;
-	networkmanager) rc-update add NetworkManager;;
-	esac
-echo -e "$hostname" > /mnt/etc/hostname;echo -e "hostname=$hostname" > /mnt/etc/conf.d/hostname;;
-esac
 
-echo -e "127.0.1.1 localhost.localdomain $hostname" >> /mnt/etc/hosts
+	echo -e "127.0.1.1 localhost.localdomain $hostname" >> /mnt/etc/hosts
 
-echo -e "LANG=\"$locale.UTF-8\"\nLC_COLLATE=\"C\"" > /mnt/etc/locale.conf
+	echo -e "LANG=\"$locale.UTF-8\"\nLC_COLLATE=\"C\"" > /mnt/etc/locale.conf
 
-artix-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=Artix
-artix-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
+	artix-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=Artix
+	artix-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 
-artix-chroot /mnt useradd -m -g users -G wheel -s /bin/bash $userlogin
+	artix-chroot /mnt useradd -m -g users -G wheel -s /bin/bash $userlogin
 
-artix-chroot /mnt passwd
-artix-chrot /mnt passwd $userlogin
+	artix-chroot /mnt passwd
+	artix-chrot /mnt passwd $userlogin
+else
+	break
+	exit
+fi
+break
+done
 
-umount -R /mnt
-exit
 
