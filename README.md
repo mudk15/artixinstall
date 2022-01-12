@@ -4,5 +4,5 @@
 3. Partition, format and mount partitions
 4. Print:
 ```bash
-bash <(curl -s https://raw.githubusercontent.com/mudk15/artixinstall/main/script.sh)
+bash <(curl https://raw.githubusercontent.com/mudk15/artixinstall/main/script.sh)
 ```
