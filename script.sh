@@ -85,8 +85,8 @@ if [[ $answer == 'yes' ]];then
 			echo -e "$hostname" > /mnt/etc/hostname;;
 		openrc)
 			case $netmgr in
-			connman) rc-update add connmand;;
-			networkmanager) rc-update add NetworkManager;;
+			connman)artix-chroot /mnt rc-update add connmand;;
+			networkmanager)artix-chroot /mnt rc-update add NetworkManager;;
 			esac
 			echo -e "$hostname" > /mnt/etc/hostname;echo -e "hostname=$hostname" > /mnt/etc/conf.d/hostname;;
 	esac
