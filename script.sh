@@ -99,7 +99,7 @@ if [[ $answer == 'yes' ]];then
 	artix-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 
 	artix-chroot /mnt useradd -m -g users -G wheel -s /bin/bash $userlogin
-	sed -i '82s/^# //' /etc/sudoers
+	sed -i '82s/^# //' /mnt/etc/sudoers
 	artix-chroot /mnt passwd
 	artix-chroot /mnt passwd $userlogin
 else
