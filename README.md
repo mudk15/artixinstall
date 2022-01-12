@@ -1,7 +1,6 @@
 # artixinstall
 1. Partition and mount disks
 2. Choose variant
-## 2.1 git
   1. Enter livecd
   2. Enter root (su)
   3. pacman -Sy git
@@ -11,7 +10,6 @@
 ```bash
 pacman -Sy git;git clone https://github.com/mudk15/artixinstall;cd artixinstall;./script.sh
 ```
-## 2.1 wget 
   1. Enter livecd
   2. Enter root (su)
   3. pacman -Sy wget
