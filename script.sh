@@ -101,7 +101,7 @@ if [[ $answer == 'yes' ]];then
 	artix-chroot /mnt useradd -m -g users -G wheel -s /bin/bash $userlogin
 
 	artix-chroot /mnt passwd
-	artix-chrot /mnt passwd $userlogin
+	artix-chroot /mnt passwd $userlogin
 else
 	break
 	exit
