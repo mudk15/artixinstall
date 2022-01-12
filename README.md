@@ -1,6 +1,7 @@
 # artixinstall
+
 ## git
-1. Enter livecd
+1.1 Enter livecd
 2. Enter root (su)
 3. pacman -Sy git
 4. git clone https://github.com/mudk15/artixinstall
