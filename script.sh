@@ -17,6 +17,10 @@ echo -e "\n\tSelect editor"
 select texted in nano vim neovim;do 
 echo -e "\n\tYou select $texted\n";break;done
 
+echo -e "\n\tSelect sudo"
+select super in sudo opendoas;do 
+echo -e "\n\tYou select $super\n";break;done
+
 echo -e "\n\tSelect dhcp client"
 select dhcpclient in dhcpcd dhclient;do 
 echo -e "\n\tYou select $dhcpclient\n";break;done
@@ -54,6 +58,7 @@ echo -e "
 \tKernel\t\t - $kernel
 \tUcode\t\t - $ucode
 \tEditor\t\t - $texted
+\tSU\t\t - $super
 \tDHCP\t\t - $dhcpclient
 \tNetwork Manager\t - $netmgr
 \tUser Login\t - $userlogin
@@ -66,7 +71,7 @@ echo -e "\n\tAre you sure?"
 select answer in 'yes' 'exit'
 do 
 if [[ $answer == 'yes' ]];then
-	basestrap /mnt/ base base-devel $init "elogind-$init" $kernel $ucode linux-firmware $texted sudo grub os-prober efibootmgr $dhcpclient "$netmgr-$init"
+	basestrap /mnt/ base base-devel $init "elogind-$init" $kernel $ucode linux-firmware $texted $super grub os-prober efibootmgr $dhcpclient "$netmgr-$init"
 
 	fstabgen -U /mnt >> /mnt/etc/fstab
 
@@ -99,8 +104,14 @@ if [[ $answer == 'yes' ]];then
 	artix-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 
 	artix-chroot /mnt useradd -m -g users -G wheel -s /bin/bash $userlogin
-	sed -i '82s/^# //' /mnt/etc/sudoers
+	case $super in
+		sudo) sed -i '82s/^# //' /mnt/etc/sudoers;;
+		opendoas) echo 'permit persist :wheel' > /mnt/etc/doas.conf;;
+	esac
+	
+	echo -e "\tPrint pass to root"
 	artix-chroot /mnt passwd
+	echo -e "\tPrint pass to $userlogin"
 	artix-chroot /mnt passwd $userlogin
 else
 	break
