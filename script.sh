@@ -106,7 +106,10 @@ if [[ $answer == 'yes' ]];then
 	artix-chroot /mnt useradd -m -g users -G wheel -s /bin/bash $userlogin
 	case $super in
 		sudo) sed -i '82s/^# //' /mnt/etc/sudoers;;
-		opendoas) echo 'permit persist :wheel' > /mnt/etc/doas.conf;;
+		opendoas) echo 'permit persist :wheel' > /mnt/etc/doas.conf
+		chown root:root /mnt/etc/doas.conf
+		chmod 0400 /mnt/etc/doas.conf
+		;;
 	esac
 	
 	echo -e "\tPrint pass to root"
