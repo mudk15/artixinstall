@@ -1,6 +1,18 @@
 #!/bin/bash
 
-until [[ $ready_opt == "yes" && -n $kernel && -n $init && -n $dhcp ]];do
+#FUNCTIONS
+echo_select () {
+	if [[ -z $select_var ]];then
+		clear
+		echo -e "\n\tWrong select\n"
+	else
+		clear
+		echo -e "\n\tYou select $select_var\n"
+	fi
+	unset select_var
+}
+
+until [[ $ready_opt == "yes" ]];do
 	PS3=" Print: "
 	
 	until [[ -n $init ]];do
@@ -8,14 +20,9 @@ until [[ $ready_opt == "yes" && -n $kernel && -n $init && -n $dhcp ]];do
 		select init in runit openrc;do
 			break
 		done
-
-		if [[ -z $init ]];then
-			clear
-			echo -e "\n\tWrong select\n"
-		else
-			clear
-			echo -e "\n\tYou select $init\n"
-		fi
+		
+		select_var="$init"
+		echo_select
 	done
 	
 	until [[ -n $kernel ]];do
@@ -24,13 +31,8 @@ until [[ $ready_opt == "yes" && -n $kernel && -n $init && -n $dhcp ]];do
 			break
 		done
 
-		if [[ -z $kernel ]];then
-			clear
-			echo -e "\n\tWrong select\n"
-		else
-			clear
-			echo -e "\n\tYou select $kernel\n"
-		fi
+		select_var="$kernel"
+		echo_select
 	done
 
 	until [[ -n $dhcp ]];do
@@ -39,13 +41,8 @@ until [[ $ready_opt == "yes" && -n $kernel && -n $init && -n $dhcp ]];do
 			break
 		done
 
-		if [[ -z $dhcp ]];then
-			clear
-			echo -e "\n\tWrong select\n"
-		else
-			clear
-			echo -e "\n\tYou select $dhcp\n"
-		fi
+		select_var="$dhcp"
+		echo_select
 	done
 
 	until [[ -n $locale ]];do
@@ -54,31 +51,30 @@ until [[ $ready_opt == "yes" && -n $kernel && -n $init && -n $dhcp ]];do
 			break
 		done
 
-		if [[ -z $locale ]];then
-			clear
-			echo -e "\n\tWrong select\n"
-		else
-			clear
-			echo -e "\n\tYou select $locale\n"
-		fi
+		select_var="$locale"
+		echo_select
 	done
 
 	until [[ -n $timez ]];do
-		until [[ ]];do
+		until [[ -n $region ]];do
 			unset region
 			echo -e "\n\tSelect region\n"
 			select region in $(find /usr/share/zoneinfo/ -type d|sed '1d;/right/d;/posix/d;/America\//d;s/\/usr\/share\/zoneinfo\///');do
 				break
 			done
+			
+			select_var="$region"
+			echo_select
 		done
 
-		if [[ -z $timez ]];then
-			clear
-			echo -e "\n\tWrong select\n"
-		else
-			clear
-			echo -e "\n\tYou select $timez\n"
-		fi
+		unset timez
+		echo -e "\n\tSelect region\n"
+		select region in $(find /usr/share/zoneinfo/ -type d|sed '1d;/right/d;/posix/d;/America\//d;s/\/usr\/share\/zoneinfo\///');do
+			break
+		done
+		
+		select_var="$timez"
+		echo_select
 	done
 
 	unset userl
